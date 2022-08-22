@@ -36,10 +36,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: md5(password) }).then(response => {
         const { token } = response
-        console.log(token)
+        // console.log(token)
         commit('SET_TOKEN', token)
         setToken(token)
         resolve()
+        // getInfo().then(() {
+        //   resolve()
+        // })
       }).catch(error => {
         reject(error)
       })
@@ -51,24 +54,25 @@ const actions = {
     return new Promise((resolve, reject) => {
       const t = new Date().getTime()
       getInfo(t).then(response => {
-        const { roles, name, avatar, introduction } = response
+        const data = response
 
-        if (!name) {
+        if (!data) {
           reject('Verification failed, please Login again.')
         }
 
-        // const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction } = data
 
         // roles must be a non-empty array
-        // if (!roles || roles.length <= 0) {
-        //   reject('getInfo: roles must be a non-null array!')
-        // }
-
+        if (!roles || roles.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+        // const roles = ['admin']
+        // const roles = 'admin'
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        // resolve(data)
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
