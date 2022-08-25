@@ -19,7 +19,7 @@ import './permission' // permission control
 import './utils/error-log' // error log
 import md5 from 'js-md5'
 import * as filters from './filters' // global filters
-
+import './plugins/video.js'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

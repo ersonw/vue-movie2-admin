@@ -11,15 +11,7 @@ import Layout from '@/layout'
 // import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
-import usersRouter from '@/router/modules/users'
-import RechargeCentreRouter from '@/router/modules/RechargeCentre'
-import APPConfigRouter from '@/router/modules/APPConfig'
-import videosRouter from '@/router/modules/videos'
-import CommodityRouter from '@/router/modules/Commodity'
-import PayRouter from '@/router/modules/Pay'
-import WithdrawRouter from '@/router/modules/withdraw'
-import SystemRouter from '@/router/modules/System'
-import GameRouter from '@/router/modules/Game'
+import AVRouter from '@/router/modules/av'
 
 export const constantRoutes = [
   {
@@ -141,15 +133,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  usersRouter,
-  videosRouter,
-  CommodityRouter,
-  GameRouter,
-  PayRouter,
-  WithdrawRouter,
-  RechargeCentreRouter,
-  APPConfigRouter,
-  SystemRouter,
+  AVRouter,
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
   // chartsRouter,
