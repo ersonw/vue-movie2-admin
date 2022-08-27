@@ -33,6 +33,12 @@ const AVRouter = {
       component: () => import('@/views/av/trash'),
       name: 'trash',
       meta: { title: '视频回收站' }
+    },
+    {
+      path: 'comment',
+      component: () => import('@/views/av/comment'),
+      name: 'comment',
+      meta: { title: '视频回复' }
     }
   ]
 }

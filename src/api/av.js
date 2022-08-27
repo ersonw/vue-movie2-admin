@@ -84,3 +84,24 @@ export function deleteOrder(data) {
     data
   })
 }
+export function getCommentList(data) {
+  return request({
+    url: '/av/getCommentList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteComment(data) {
+  return request({
+    url: '/av/deleteComment',
+    method: 'post',
+    data
+  })
+}
+export function passComment(data) {
+  return request({
+    url: '/av/passComment',
+    method: 'post',
+    data
+  })
+}
