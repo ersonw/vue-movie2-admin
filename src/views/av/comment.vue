@@ -63,6 +63,13 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="评论IP" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.ip }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag type="info">
