@@ -105,3 +105,52 @@ export function passComment(data) {
     data
   })
 }
+export function getConcentration(data) {
+  return request({
+    url: '/av/getConcentration',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteConcentration(data) {
+  return request({
+    url: '/av/deleteConcentration',
+    method: 'post',
+    data
+  })
+}
+export function addConcentration(data) {
+  return request({
+    url: '/av/addConcentration',
+    method: 'post',
+    data
+  })
+}
+export function updateConcentration(data) {
+  return request({
+    url: '/av/updateConcentration',
+    method: 'post',
+    data
+  })
+}
+export function getConcentrationList(data, id) {
+  return request({
+    url: '/av/getConcentrationList/' + id,
+    method: 'get',
+    params: data
+  })
+}
+export function deleteConcentrationList(data) {
+  return request({
+    url: '/av/deleteConcentrationList',
+    method: 'post',
+    data
+  })
+}
+export function addConcentrationList(data) {
+  return request({
+    url: '/av/addConcentrationList',
+    method: 'post',
+    data
+  })
+}

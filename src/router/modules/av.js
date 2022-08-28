@@ -23,6 +23,19 @@ const AVRouter = {
       meta: { title: '收费视频' }
     },
     {
+      path: 'videoConcentration',
+      component: () => import('@/views/av/videoConcentration'),
+      name: 'videoConcentration',
+      meta: { title: '首页推荐' }
+    },
+    {
+      path: 'videoConcentration/:id(\\d+)',
+      component: () => import('@/views/av/videoConcentrationList'),
+      name: 'videoConcentrationList',
+      meta: { title: '推荐列表', noCache: true, activeMenu: 'videoConcentration' },
+      hidden: true
+    },
+    {
       path: 'videoOrder',
       component: () => import('@/views/av/videoOrder'),
       name: 'videoOrder',
