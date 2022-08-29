@@ -140,6 +140,13 @@ export function getConcentrationList(data, id) {
     params: data
   })
 }
+export function getActiveList(data, id) {
+  return request({
+    url: '/av/getActiveList/' + id,
+    method: 'get',
+    params: data
+  })
+}
 export function deleteConcentrationList(data) {
   return request({
     url: '/av/deleteConcentrationList',

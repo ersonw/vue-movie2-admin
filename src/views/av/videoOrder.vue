@@ -26,7 +26,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标题" min-width="150px">
+      <el-table-column label="标题" min-width="30">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.title }}</span>
         </template>
