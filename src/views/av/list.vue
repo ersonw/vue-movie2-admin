@@ -79,6 +79,13 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="试看时长（秒）" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.trial }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="真实点赞" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag type="info">
@@ -90,6 +97,13 @@
         <template slot-scope="{row}">
           <el-tag type="info">
             {{ row.play }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="播放率(超过试看时间)" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.scale }}%
           </el-tag>
         </template>
       </el-table-column>
@@ -124,6 +138,9 @@
         </el-form-item>
         <el-form-item label="播放基数">
           <el-input v-model="temp.plays" type="number" />
+        </el-form-item>
+        <el-form-item label="试看时长(秒)">
+          <el-input v-model="temp.trial" type="number" />
         </el-form-item>
         <el-form-item label="Status">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
