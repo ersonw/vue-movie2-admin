@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { getActiveList, getConcentrationList, addConcentrationList, deleteConcentrationList } from '@/api/av'
+import { getVideoSourceActiveList, getVideoSourceList, addVideoSourceList, deleteVideoSourceList } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -221,7 +221,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getConcentrationList(this.listQuery, this.id).then(response => {
+      getVideoSourceList(this.listQuery, this.id).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -233,7 +233,7 @@ export default {
     },
     getActiveList() {
       this.childLoading = true
-      getActiveList(this.childQuery, this.id).then(response => {
+      getVideoSourceActiveList(this.childQuery, this.id).then(response => {
         this.childList = response.list
         this.childTotal = response.total
 
@@ -253,7 +253,7 @@ export default {
       this.$router.push({ path: '/av/videoConcentration/' + row.id })
     },
     handleDeleteAll() {
-      deleteConcentrationList({ 'ids': this.ids, 'id': this.id }).then(data => {
+      deleteVideoSourceList({ 'ids': this.ids, 'id': this.id }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -280,7 +280,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteConcentrationList({ 'ids': data, 'id': this.id }).then(data => {
+      deleteVideoSourceList({ 'ids': data, 'id': this.id }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -305,7 +305,7 @@ export default {
         // console.log(this.adds[key])
         ids.push(this.adds[key].id)
       }
-      addConcentrationList({ 'ids': ids, 'id': this.id }).then((data) => {
+      addVideoSourceList({ 'ids': ids, 'id': this.id }).then((data) => {
         // const index = this.list.findIndex(v => v.id === this.temp.id)
         const { list } = data
         // this.list.splice(0, 0, result)

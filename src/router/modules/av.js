@@ -52,6 +52,37 @@ const AVRouter = {
       component: () => import('@/views/av/comment'),
       name: 'comment',
       meta: { title: '视频回复' }
+    },
+    {
+      path: 'videoSource',
+      component: () => import('@/views/av/videoSource'),
+      name: 'videoSource',
+      meta: { title: '来源标签' }
+    },
+    {
+      path: 'videoSource/:id(\\d+)',
+      component: () => import('@/views/av/videoSourceList'),
+      name: 'videoSourceList',
+      meta: { title: '来源标签列表', noCache: true, activeMenu: 'videoSource' },
+      hidden: true
+    },
+    {
+      path: 'videoConfig',
+      component: () => import('@/views/av/videoConfig'),
+      name: 'videoConfig',
+      meta: { title: '长视频配置' }
+    },
+    {
+      path: 'indexPublicity',
+      component: () => import('@/views/av/indexPublicity'),
+      name: 'indexPublicity',
+      meta: { title: '首页广告' }
+    },
+    {
+      path: 'playPublicity',
+      component: () => import('@/views/av/playPublicity'),
+      name: 'playPublicity',
+      meta: { title: '播放页广告' }
     }
   ]
 }

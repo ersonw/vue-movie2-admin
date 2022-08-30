@@ -161,3 +161,116 @@ export function addConcentrationList(data) {
     data
   })
 }
+
+export function getVideoSource(data) {
+  return request({
+    url: '/av/getVideoSource',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteVideoSource(data) {
+  return request({
+    url: '/av/deleteVideoSource',
+    method: 'post',
+    data
+  })
+}
+export function addVideoSource(data) {
+  return request({
+    url: '/av/addVideoSource',
+    method: 'post',
+    data
+  })
+}
+export function updateVideoSource(data) {
+  return request({
+    url: '/av/updateVideoSource',
+    method: 'post',
+    data
+  })
+}
+export function getVideoSourceList(data, id) {
+  return request({
+    url: '/av/getVideoSourceList/' + id,
+    method: 'get',
+    params: data
+  })
+}
+export function getVideoSourceActiveList(data, id) {
+  return request({
+    url: '/av/getVideoSourceActiveList/' + id,
+    method: 'get',
+    params: data
+  })
+}
+export function deleteVideoSourceList(data) {
+  return request({
+    url: '/av/deleteVideoSourceList',
+    method: 'post',
+    data
+  })
+}
+export function addVideoSourceList(data) {
+  return request({
+    url: '/av/addVideoSourceList',
+    method: 'post',
+    data
+  })
+}
+export function getIndexPublicity(data) {
+  return request({
+    url: '/av/getIndexPublicity',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteIndexPublicity(data) {
+  return request({
+    url: '/av/deleteIndexPublicity',
+    method: 'post',
+    data
+  })
+}
+export function addIndexPublicity(data) {
+  return request({
+    url: '/av/addIndexPublicity',
+    method: 'post',
+    data
+  })
+}
+export function updateIndexPublicity(data) {
+  return request({
+    url: '/av/updateIndexPublicity',
+    method: 'post',
+    data
+  })
+}
+export function getPlayPublicity(data) {
+  return request({
+    url: '/av/getPlayPublicity',
+    method: 'get',
+    params: data
+  })
+}
+export function deletePlayPublicity(data) {
+  return request({
+    url: '/av/deletePlayPublicity',
+    method: 'post',
+    data
+  })
+}
+export function addPlayPublicity(data) {
+  return request({
+    url: '/av/addPlayPublicity',
+    method: 'post',
+    data
+  })
+}
+export function updatePlayPublicity(data) {
+  return request({
+    url: '/av/updatePlayPublicity',
+    method: 'post',
+    data
+  })
+}

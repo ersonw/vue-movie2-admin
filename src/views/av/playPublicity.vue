@@ -29,20 +29,25 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="推荐标题" min-width="150px">
+      <el-table-column label="标题" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
+          <el-link :href="row.image" target="_blank">
             <span class="link-type">{{ row.name }}</span>
-          </router-link>
+          </el-link>
         </template>
       </el-table-column>
-      <el-table-column label="总计" min-width="150px">
+      <el-table-column label="跳转链接" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
-            <el-tag type="success">
-              {{ row.count }}
-            </el-tag>
-          </router-link>
+          <el-link :href="row.url" target="_blank">
+            <span class="link-type">{{ row.url }}</span>
+          </el-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="反馈统计" min-width="150px">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            {{ row.count }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="添加时间" width="150px" align="center">
@@ -50,9 +55,30 @@
           <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" width="150px" align="center">
+      <el-table-column label="修改时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="显示页面" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.page | pageFilter }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="跳转类型" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.type | typeFilter }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.status | statusFilter }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -67,26 +93,45 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <el-dialog title="类名" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+    <el-drawer size="60%" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
         <el-form-item label="标题">
           <el-input v-model="temp.name" type="textarea" />
         </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
+        <el-form-item label="图片地址">
+          <el-input v-model="temp.image" type="textarea" />
+        </el-form-item>
+        <el-form-item label="跳转地址">
+          <el-input v-model="temp.url" type="textarea" />
+        </el-form-item>
+        <el-form-item label="显示页面">
+          <el-select v-model="temp.page" class="filter-item" placeholder="选择">
+            <el-option v-for="(item, index) in pageOptions" :key="index" :label="item" :value="index" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="跳转类型">
+          <el-select v-model="temp.type" class="filter-item" placeholder="选择">
+            <el-option v-for="(item, index) in typeOptions" :key="index" :label="item" :value="index" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="temp.status" class="filter-item" placeholder="选择标签状态">
+            <el-option v-for="(item, index) in statusOptions" :key="index" :label="item" :value="index" />
+          </el-select>
+        </el-form-item>
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="temp.id === undefined?createData():updateData()">
           确认
         </el-button>
-      </div>
-    </el-dialog>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import { getConcentration, deleteConcentration, addConcentration, updateConcentration } from '@/api/av'
+import { getPlayPublicity, deletePlayPublicity, addPlayPublicity, updatePlayPublicity } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -104,6 +149,34 @@ export default {
           return '已启用'
         default:
           return '已删除'
+      }
+    },
+    typeFilter(type) {
+      switch (type) {
+        case 0:
+          return '打开外部浏览器'
+        case 1:
+          return '打开内部浏览器'
+        case 2:
+          return '打开视频'
+        // case 3:
+        //   return '打开内部接口'
+        default:
+          return '未知'
+      }
+    },
+    pageFilter(page) {
+      switch (page) {
+        case 0:
+          return '未指定'
+        case 1:
+          return '视频播放页'
+        // case 2:
+        //   return '打开视频'
+        // case 3:
+        //   return '打开内部接口'
+        default:
+          return '未知'
       }
     }
   },
@@ -123,7 +196,10 @@ export default {
       },
       ids: [],
       dialogFormVisible: false,
-      temp: {}
+      temp: {},
+      statusOptions: ['禁用', '启用'],
+      pageOptions: ['不指定', '视频播放页'],
+      typeOptions: ['打开外部浏览器', '打开内部浏览器', '打开视频']
     }
   },
   created() {
@@ -132,7 +208,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getConcentration(this.listQuery).then(response => {
+      getPlayPublicity(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -149,7 +225,7 @@ export default {
       this.$router.push({ path: '/av/videoConcentration/' + row.id })
     },
     handleDeleteAll() {
-      deleteConcentration({ 'ids': this.ids }).then(data => {
+      deletePlayPublicity({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -181,7 +257,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteConcentration({ 'ids': data }).then(data => {
+      deletePlayPublicity({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -204,8 +280,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+          tempData.url1 = tempData.url
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          addConcentration(tempData).then((data) => {
+          addPlayPublicity(tempData).then((data) => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
             this.list.splice(0, 0, result)
@@ -225,8 +302,9 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+          tempData.url1 = tempData.url
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateConcentration(tempData).then((data) => {
+          updatePlayPublicity(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
             this.list.splice(index, 1, result)

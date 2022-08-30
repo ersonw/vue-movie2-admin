@@ -142,7 +142,7 @@
         <el-form-item label="试看时长(秒)">
           <el-input v-model="temp.trial" type="number" />
         </el-form-item>
-        <el-form-item label="Status">
+        <el-form-item label="状态">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
             <el-option v-for="(item, index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>

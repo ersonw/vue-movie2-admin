@@ -31,14 +31,14 @@
       </el-table-column>
       <el-table-column label="推荐标题" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
+          <router-link :to="'/av/videoSource/'+row.id">
             <span class="link-type">{{ row.name }}</span>
           </router-link>
         </template>
       </el-table-column>
       <el-table-column label="总计" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
+          <router-link :to="'/av/videoSource/'+row.id">
             <el-tag type="success">
               {{ row.count }}
             </el-tag>
@@ -53,6 +53,13 @@
       <el-table-column label="更新时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.status | statusFilter }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -72,6 +79,11 @@
         <el-form-item label="标题">
           <el-input v-model="temp.name" type="textarea" />
         </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="temp.status" class="filter-item" placeholder="选择标签状态">
+            <el-option v-for="(item, index) in statusOptions" :key="index" :label="item" :value="index" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -86,7 +98,7 @@
 </template>
 
 <script>
-import { getConcentration, deleteConcentration, addConcentration, updateConcentration } from '@/api/av'
+import { getVideoSource, deleteVideoSource, addVideoSource, updateVideoSource } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -123,7 +135,8 @@ export default {
       },
       ids: [],
       dialogFormVisible: false,
-      temp: {}
+      temp: {},
+      statusOptions: ['禁用', '启用']
     }
   },
   created() {
@@ -132,7 +145,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getConcentration(this.listQuery).then(response => {
+      getVideoSource(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -149,7 +162,7 @@ export default {
       this.$router.push({ path: '/av/videoConcentration/' + row.id })
     },
     handleDeleteAll() {
-      deleteConcentration({ 'ids': this.ids }).then(data => {
+      deleteVideoSource({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -181,7 +194,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteConcentration({ 'ids': data }).then(data => {
+      deleteVideoSource({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -205,7 +218,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          addConcentration(tempData).then((data) => {
+          addVideoSource(tempData).then((data) => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
             this.list.splice(0, 0, result)
@@ -226,7 +239,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateConcentration(tempData).then((data) => {
+          updateVideoSource(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
             this.list.splice(index, 1, result)
