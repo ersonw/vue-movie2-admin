@@ -13,6 +13,9 @@
       <el-form-item label="会员购买视频优惠(%)">
         <el-input v-model="temp.VideoPayLess" type="number" />
       </el-form-item>
+      <el-form-item label="视频推送密码">
+        <el-input v-model="temp.passwd" type="text" />
+      </el-form-item>
       <el-form-item label="仅会员可以观看免费视频">
         <el-switch
           v-model="temp.VideoPay"
