@@ -274,3 +274,31 @@ export function updatePlayPublicity(data) {
     data
   })
 }
+export function getVideoConfig(data) {
+  return request({
+    url: '/av/getVideoConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteVideoConfig(data) {
+  return request({
+    url: '/av/deleteVideoConfig',
+    method: 'post',
+    data
+  })
+}
+export function addVideoConfig(data) {
+  return request({
+    url: '/av/addVideoConfig',
+    method: 'post',
+    data
+  })
+}
+export function updateVideoConfig(data) {
+  return request({
+    url: '/av/updateVideoConfig',
+    method: 'post',
+    data
+  })
+}
