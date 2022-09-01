@@ -12,6 +12,7 @@ import Layout from '@/layout'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 import AVRouter from '@/router/modules/av'
+import ShortVideoRouter from '@/router/modules/shortVideo'
 
 export const constantRoutes = [
   {
@@ -134,6 +135,7 @@ export const asyncRoutes = [
     ]
   },
   AVRouter,
+  ShortVideoRouter,
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
   // chartsRouter,
