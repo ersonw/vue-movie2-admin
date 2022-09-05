@@ -28,6 +28,25 @@ const ShortVideoRouter = {
       component: () => import('@/views/short/auditVideoList'),
       name: 'auditVideoList',
       meta: { title: '审核视频' }
+    },
+    {
+      path: 'auditCommentList',
+      component: () => import('@/views/short/auditCommentList'),
+      name: 'auditCommentList',
+      meta: { title: '审核评论' }
+    },
+    {
+      path: 'auditAuditCommentListChild/:id(\\d+)',
+      component: () => import('@/views/short/auditAuditCommentListChild'),
+      name: 'auditAuditCommentListChild',
+      meta: { title: '回复列表', noCache: true, activeMenu: 'auditCommentList' },
+      hidden: true
+    },
+    {
+      path: 'auditComment',
+      component: () => import('@/views/short/auditComment'),
+      name: 'auditComment',
+      meta: { title: '审核评论举报' }
     }
   ]
 }

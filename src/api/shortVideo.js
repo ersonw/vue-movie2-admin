@@ -62,3 +62,67 @@ export function denyAuditVideo(data) {
     data
   })
 }
+export function getAuditCommentList(data) {
+  return request({
+    url: '/shortVideo/getAuditCommentList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteAuditComments(data) {
+  return request({
+    url: '/shortVideo/deleteAuditComments',
+    method: 'post',
+    data
+  })
+}
+export function denyAuditComments(data) {
+  return request({
+    url: '/shortVideo/denyAuditComments',
+    method: 'post',
+    data
+  })
+}
+export function passAuditComments(data) {
+  return request({
+    url: '/shortVideo/passAuditComments',
+    method: 'post',
+    data
+  })
+}
+export function getAuditCommentListChild(data, id) {
+  return request({
+    url: '/shortVideo/getAuditCommentListChild/' + id,
+    method: 'get',
+    params: data
+  })
+}
+export function getAuditComment(data) {
+  return request({
+    url: '/shortVideo/getAuditComment',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteAuditComment(data) {
+  return request({
+    url: '/shortVideo/deleteAuditComment',
+    method: 'post',
+    data
+  })
+}
+export function denyAuditComment(data) {
+  return request({
+    url: '/shortVideo/denyAuditComment',
+    method: 'post',
+    data
+  })
+}
+export function passAuditComment(data) {
+  return request({
+    url: '/shortVideo/passAuditComment',
+    method: 'post',
+    data
+  })
+}
+

@@ -151,6 +151,7 @@ export default {
       this.loading = true
       denyAuditVideo({ 'id': this.list[this.videoIndex].id }).then(() => {
         this.loading = false
+        this.list.slice(this.videoIndex, 1)
         this.$notify({
           title: 'Success',
           message: '操作成功',
