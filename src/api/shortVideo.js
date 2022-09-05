@@ -125,4 +125,45 @@ export function passAuditComment(data) {
     data
   })
 }
-
+export function getShareVideo(data) {
+  return request({
+    url: '/shortVideo/getShareVideo',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteShareVideo(data) {
+  return request({
+    url: '/shortVideo/deleteShareVideo',
+    method: 'post',
+    data
+  })
+}
+export function getVideoConfig(data) {
+  return request({
+    url: '/shortVideo/getVideoConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteVideoConfig(data) {
+  return request({
+    url: '/shortVideo/deleteVideoConfig',
+    method: 'post',
+    data
+  })
+}
+export function addVideoConfig(data) {
+  return request({
+    url: '/shortVideo/addVideoConfig',
+    method: 'post',
+    data
+  })
+}
+export function updateVideoConfig(data) {
+  return request({
+    url: '/shortVideo/updateVideoConfig',
+    method: 'post',
+    data
+  })
+}

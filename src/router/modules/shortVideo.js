@@ -47,6 +47,18 @@ const ShortVideoRouter = {
       component: () => import('@/views/short/auditComment'),
       name: 'auditComment',
       meta: { title: '审核评论举报' }
+    },
+    {
+      path: 'shareVideo',
+      component: () => import('@/views/short/shareVideo'),
+      name: 'shareVideo',
+      meta: { title: '分享记录' }
+    },
+    {
+      path: 'shortConfig',
+      component: () => import('@/views/short/shortConfig'),
+      name: 'shortConfig',
+      meta: { title: '短视频配置' }
     }
   ]
 }
