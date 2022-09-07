@@ -35,7 +35,12 @@
           <span>{{ row.orderNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="充值面额" min-width="100">
+      <el-table-column label="通道订单号" class-name="status-col" min-width="200">
+        <template slot-scope="{row}">
+          <span>{{ row.tradeNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="充值面额" width="100">
         <template slot-scope="{row}">
           <el-tag type="success">
             {{ row.amount }}
@@ -53,13 +58,6 @@
         <template slot-scope="{row}">
           <el-tag type="success">
             {{ row.totalFee }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="通道订单号" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag type="success">
-            {{ row.tradeNo }}
           </el-tag>
         </template>
       </el-table-column>
