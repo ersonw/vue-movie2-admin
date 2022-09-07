@@ -83,3 +83,24 @@ export function updateGameConfig(data) {
     data
   })
 }
+export function getGameOrderList(data) {
+  return request({
+    url: '/game/getGameOrderList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteGameOrder(data) {
+  return request({
+    url: '/game/deleteGameOrder',
+    method: 'post',
+    data
+  })
+}
+export function makeupGameOrder(data) {
+  return request({
+    url: '/game/makeupGameOrder',
+    method: 'post',
+    data
+  })
+}

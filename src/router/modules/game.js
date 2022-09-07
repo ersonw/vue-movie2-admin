@@ -26,6 +26,12 @@ const GameRouter = {
       component: () => import('@/views/game/gameButton'),
       name: 'gameButton',
       meta: { title: '充值按钮' }
+    },
+    {
+      path: 'gameOrder',
+      component: () => import('@/views/game/gameOrder'),
+      name: 'gameOrder',
+      meta: { title: '充值订单' }
     }
   ]
 }
