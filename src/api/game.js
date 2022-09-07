@@ -69,3 +69,17 @@ export function getButtonConfig(id) {
     method: 'get'
   })
 }
+export function getGameConfig(data) {
+  return request({
+    url: '/game/getGameConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateGameConfig(data) {
+  return request({
+    url: '/game/updateGameConfig',
+    method: 'post',
+    data
+  })
+}

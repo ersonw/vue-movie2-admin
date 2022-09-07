@@ -16,6 +16,12 @@ const GameRouter = {
       meta: { title: '全部游戏' }
     },
     {
+      path: 'gameConfig',
+      component: () => import('@/views/game/gameConfig'),
+      name: 'gameConfig',
+      meta: { title: '游戏配置' }
+    },
+    {
       path: 'gameButton',
       component: () => import('@/views/game/gameButton'),
       name: 'gameButton',
