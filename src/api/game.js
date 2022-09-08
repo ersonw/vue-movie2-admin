@@ -104,3 +104,38 @@ export function makeupGameOrder(data) {
     data
   })
 }
+export function getGameWithdrawConfig(data) {
+  return request({
+    url: '/game/getGameWithdrawConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateGameWithdrawConfig(data) {
+  return request({
+    url: '/game/updateGameWithdrawConfig',
+    method: 'post',
+    data
+  })
+}
+export function getGameWithdrawOrder(data) {
+  return request({
+    url: '/game/getGameWithdrawOrder',
+    method: 'get',
+    params: data
+  })
+}
+export function makeDownGameWithdrawOrder(data) {
+  return request({
+    url: '/game/makeDownGameWithdrawOrder',
+    method: 'post',
+    data
+  })
+}
+export function makeupGameWithdrawOrder(data) {
+  return request({
+    url: '/game/makeupGameWithdrawOrder',
+    method: 'post',
+    data
+  })
+}

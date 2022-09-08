@@ -32,6 +32,18 @@ const GameRouter = {
       component: () => import('@/views/game/gameOrder'),
       name: 'gameOrder',
       meta: { title: '充值订单' }
+    },
+    {
+      path: 'gameWithdrawConfig',
+      component: () => import('@/views/game/gameWithdrawConfig'),
+      name: 'gameWithdrawConfig',
+      meta: { title: '提现配置' }
+    },
+    {
+      path: 'gameWithdrawOrder',
+      component: () => import('@/views/game/gameWithdrawOrder'),
+      name: 'gameWithdrawOrder',
+      meta: { title: '提现订单' }
     }
   ]
 }
