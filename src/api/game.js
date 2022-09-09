@@ -181,3 +181,66 @@ export function updateGameWater(data) {
     params: data
   })
 }
+export function getGamePublicity(data) {
+  return request({
+    url: '/game/getGamePublicity',
+    method: 'get',
+    params: data
+  })
+}
+export function updateGamePublicity(data) {
+  return request({
+    url: '/game/updateGamePublicity',
+    method: 'post',
+    data
+  })
+}
+export function deleteGamePublicity(data) {
+  return request({
+    url: '/game/deleteGamePublicity',
+    method: 'post',
+    data
+  })
+}
+export function addGamePublicity(data) {
+  return request({
+    url: '/game/addGamePublicity',
+    method: 'post',
+    data
+  })
+}
+export function getGameScroll(data) {
+  return request({
+    url: '/game/getGameScroll',
+    method: 'get',
+    params: data
+  })
+}
+export function updateGameScroll(data) {
+  return request({
+    url: '/game/updateGameScroll',
+    method: 'post',
+    data
+  })
+}
+export function deleteGameScroll(data) {
+  return request({
+    url: '/game/deleteGameScroll',
+    method: 'post',
+    data
+  })
+}
+export function addGameScroll(data) {
+  return request({
+    url: '/game/addGameScroll',
+    method: 'post',
+    data
+  })
+}
+export function automaticGameScroll(data) {
+  return request({
+    url: '/game/automaticGameScroll',
+    method: 'post',
+    data
+  })
+}

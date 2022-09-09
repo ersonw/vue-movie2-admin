@@ -1,0 +1,293 @@
+<template>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-input v-model="listQuery.title" placeholder="游戏名称" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" style="margin-left: 1vw;" @click="handleFilter">
+        搜索
+      </el-button>
+      <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete-solid" style="margin-left: 1vw;" @click="handleDeleteAll">
+        批量删除({{ ids.length }})
+      </el-button>
+      <el-button v-waves class="filter-item" type="success" icon="el-icon-plus" style="margin-left: 1vw;" @click="handleCreate">
+        添加
+      </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus" style="margin-left: 1vw;" @click="handleAutomatic">
+        自动生成
+      </el-button>
+    </div>
+
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+        <template slot-scope="{row}">
+          <span>{{ row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="用户昵称" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="通报金额(分)" class-name="status-col" min-width="150">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.amount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="通报游戏名" class-name="status-col" min-width="150">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.game }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="添加时间" width="150px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row,$index}">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+            编辑
+          </el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+
+    <el-drawer size="40%" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
+        <el-form-item label="用户昵称">
+          <el-input v-model="temp.name" type="text" />
+        </el-form-item>
+        <el-form-item label="通报金额(分)">
+          <el-input v-model="temp.amount" type="number" />
+        </el-form-item>
+        <!--        <el-form-item label="通报游戏">-->
+        <!--          <el-input v-model="temp.game" type="text" />-->
+        <!--        </el-form-item>-->
+        <el-form-item label="通报游戏">
+          <el-select v-model="temp.game" class="filter-item" placeholder="选择通报游戏">
+            <el-option v-for="(item, index) in gameOptions" :key="index" :label="item.name" :value="item.name" />
+          </el-select>
+        </el-form-item>
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          确认
+        </el-button>
+      </el-form>
+    </el-drawer>
+  </div>
+</template>
+
+<script>
+import { getGameScroll, deleteGameScroll, updateGameScroll, addGameScroll, automaticGameScroll, getGameList } from '@/api/game'
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+export default {
+  name: 'ComplexTable',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    statusFilter(status) {
+      switch (status) {
+        case 0:
+          return '未上架'
+        case 1:
+          return '已上架'
+        default:
+          return '已删除'
+      }
+    },
+    typeFilter(status) {
+      switch (status) {
+        case 0:
+          return '外部浏览打开'
+        case 1:
+          return '内置webview打开'
+        case 2:
+          return '打开视频ID'
+        case 3:
+          return '打开内置页面'
+        default:
+          return '已删除'
+      }
+    }
+  },
+  data() {
+    return {
+      tableKey: 0,
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        title: undefined
+      },
+      ids: [],
+      temp: {},
+      statusOptions: ['下架轮播', '上架轮播'],
+      typeOptions: ['外部浏览器打开', '内置view打开', '打开视频ID', '打开内置页面'],
+      dialogFormVisible: false,
+      dialogStatus: 'create',
+      gameOptions: []
+    }
+  },
+  created() {
+    this.getGameList()
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      getGameScroll(this.listQuery).then(response => {
+        this.list = response.list
+        this.total = response.total
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    getGameList() {
+      this.gameOptions = []
+      getGameList({ page: 1, limit: 300 }).then(response => {
+        const { list } = response
+        this.gameOptions = list
+        this.gameOptions.unshift({ name: '手动提现' })
+      })
+    },
+    handleOpen(url) {
+      window.open(url, '_blank')
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id)
+    },
+    handleUser(row) {
+      console.log(row)
+    },
+    resetTemp() {
+      this.temp = {
+        id: undefined,
+        status: 1
+      }
+    },
+    handleAutomatic() {
+      this.$notify({
+        title: 'error',
+        message: '暂未开发',
+        type: 'error',
+        duration: 2000
+      })
+    },
+    automaticData() {
+      automaticGameScroll().then()
+    },
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          addGameScroll(this.temp).then((data) => {
+            // this.list.splice(0, 0, data)
+            this.list.unshift(data)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: '添加成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          updateGameScroll(tempData).then((data) => {
+            const index = this.list.findIndex(v => v.id === this.temp.id)
+            this.list.splice(index, 1, data)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    handleDeleteAll() {
+      deleteGameScroll({ 'ids': this.ids }).then(data => {
+        this.$notify({
+          title: 'Success',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.getList()
+      })
+    },
+    handleDelete(row, index) {
+      var data = []
+      data.push(row.id)
+      deleteGameScroll({ 'ids': data }).then(data => {
+        this.$notify({
+          title: 'Success',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.list.splice(index, 1)
+      })
+    },
+    formatJson(filterVal) {
+      return this.list.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    }
+  }
+}
+</script>

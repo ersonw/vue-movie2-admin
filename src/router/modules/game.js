@@ -10,6 +10,18 @@ const GameRouter = {
   },
   children: [
     {
+      path: 'gamePublicity',
+      component: () => import('@/views/game/gamePublicity'),
+      name: 'gamePublicity',
+      meta: { title: '轮播图广告' }
+    },
+    {
+      path: 'gameScroll',
+      component: () => import('@/views/game/gameScroll'),
+      name: 'gameScroll',
+      meta: { title: '滚动文字轮播' }
+    },
+    {
       path: 'gameList',
       component: () => import('@/views/game/gameList'),
       name: 'gameList',
