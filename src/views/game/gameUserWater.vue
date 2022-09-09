@@ -45,7 +45,7 @@
       <el-table-column label="有效投注" min-width="150px">
         <template slot-scope="{row}">
           <el-tag type="info">
-            {{ row.tax }}
+            {{ row.validBet }}
           </el-tag>
         </template>
       </el-table-column>
