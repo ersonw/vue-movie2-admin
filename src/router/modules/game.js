@@ -16,6 +16,19 @@ const GameRouter = {
       meta: { title: '全部游戏' }
     },
     {
+      path: 'gameWater',
+      component: () => import('@/views/game/gameWater'),
+      name: 'gameWater',
+      meta: { title: '游戏流水' }
+    },
+    {
+      path: 'gameUserWater/:id(\\d+)',
+      component: () => import('@/views/game/gameUserWater'),
+      name: 'gameUserWater',
+      meta: { title: '用户游戏流水', noCache: true, activeMenu: 'gameWater' },
+      hidden: true
+    },
+    {
       path: 'gameConfig',
       component: () => import('@/views/game/gameConfig'),
       name: 'gameConfig',
@@ -38,6 +51,12 @@ const GameRouter = {
       component: () => import('@/views/game/gameWithdrawConfig'),
       name: 'gameWithdrawConfig',
       meta: { title: '提现配置' }
+    },
+    {
+      path: 'gameWithdrawCard',
+      component: () => import('@/views/game/gameWithdrawCard'),
+      name: 'gameWithdrawCard',
+      meta: { title: '卡号管理' }
     },
     {
       path: 'gameWithdrawOrder',

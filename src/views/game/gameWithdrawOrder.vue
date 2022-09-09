@@ -35,7 +35,8 @@
       </el-table-column>
       <el-table-column label="商户订单号" class-name="status-col" width="210">
         <template slot-scope="{row}">
-          <span>{{ row.orderNo }}</span>
+          <!--          <span>{{ row.orderNo }}</span>-->
+          <span class="link-type" @click="handleDetails(row)">{{ row.orderNo }}</span>
         </template>
       </el-table-column>
       <!--      <el-table-column label="通道订单号" class-name="status-col" min-width="200">-->
@@ -94,11 +95,11 @@
           <span class="link-type">{{ row.water }}元</span>
         </template>
       </el-table-column>
-      <el-table-column label="未提现充值" class-name="status-col" width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type">{{ row.recentIn }}元</span>
-        </template>
-      </el-table-column>
+      <!--      <el-table-column label="未提现充值" class-name="status-col" width="150px">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span class="link-type">{{ row.recentIn }}元</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
       <el-table-column label="提交IP" class-name="status-col" width="150px">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.ip }}</span>
@@ -135,40 +136,39 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-drawer size="40%" :visible.sync="dialogFormVisible">
+    <el-drawer size="30%" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="充值面额">
-          <el-input v-model="temp.amount" type="number" />
+        <el-form-item label="提现金额">
+          <el-tag type="info">{{ temp.amount }}</el-tag>
         </el-form-item>
-        <el-form-item label="实际支付(元)">
-          <el-input v-model="temp.price" type="number" />
+        <el-form-item label="手续费">
+          <el-tag type="success">{{ temp.fee }}</el-tag>
         </el-form-item>
-        <el-form-item label="充值优惠">
-          <el-switch
-            v-model="temp.less"
-            :active-value="1"
-            :inactive-value="0"
-          />
+        <el-form-item label="支付金额">
+          <el-tag type="danger">{{ temp.totalFee }}</el-tag>
         </el-form-item>
-        <el-form-item label="指定充值通道">
-          <el-select v-model="temp.cashInId" class="filter-item" placeholder="选择充值通道" @change="getButtonConfig">
-            <el-option v-for="(item, index) in configs" :key="index" :label="item.title" :value="item.id" :aria-label="item.title" :disabled="item.status!==1" />
-          </el-select>
+        <el-form-item label="提现之前充值流水">
+          <el-tag type="danger">{{ temp.recentIn }}</el-tag>
         </el-form-item>
-        <el-form-item label="可用支付方式">
-          <el-tag type="success">{{ temp.typeStr }}</el-tag>
+        <el-form-item label="充值之后有效投注流水">
+          <el-tag type="danger">{{ temp.water }}</el-tag>
         </el-form-item>
-        <el-form-item label="上线按钮">
-          <el-switch
-            v-model="temp.status"
-            :active-value="1"
-            :inactive-value="0"
-          />
+        <el-form-item label="姓名">
+          <el-tag type="info">{{ temp.name }}</el-tag>
         </el-form-item>
-        <el-button @click="makeDownGameWithdrawOrder(temp)">
+        <el-form-item label="卡号">
+          <el-tag type="success">{{ temp.card }}</el-tag>
+        </el-form-item>
+        <el-form-item label="银行">
+          <el-tag type="info">{{ temp.bank }}</el-tag>
+        </el-form-item>
+        <el-form-item label="开户行">
+          <el-tag type="info">{{ temp.address }}</el-tag>
+        </el-form-item>
+        <el-button v-if="temp.status===0" @click="makeDownGameWithdrawOrder(temp)">
           退回资金并且失败
         </el-button>
-        <el-button type="primary" @click="makeupGameOrder(temp)">
+        <el-button v-if="temp.status===0" type="primary" @click="makeupGameOrder(temp)">
           提现成功
         </el-button>
       </el-form>
@@ -239,6 +239,7 @@ export default {
       makeupGameWithdrawOrder({ 'ids': data }).then(response => {
         const { list } = response
         this.list.splice(index, 1, list[0])
+        this.dialogFormVisible = false
         this.$notify({
           title: 'Success',
           message: '提现成功',
@@ -268,6 +269,15 @@ export default {
     },
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+    },
+    handleDetails(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     handleUser(row) {
       console.log(row)
@@ -300,6 +310,7 @@ export default {
           duration: 2000
         })
         this.list.splice(index, 1)
+        this.dialogFormVisible = false
       })
     },
     formatJson(filterVal) {

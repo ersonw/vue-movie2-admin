@@ -139,3 +139,45 @@ export function makeupGameWithdrawOrder(data) {
     data
   })
 }
+export function getGameWithdrawCard(data) {
+  return request({
+    url: '/game/getGameWithdrawCard',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteGameWithdrawCard(data) {
+  return request({
+    url: '/game/deleteGameWithdrawCard',
+    method: 'post',
+    data
+  })
+}
+export function updateGameWithdrawCard(data) {
+  return request({
+    url: '/game/updateGameWithdrawCard',
+    method: 'post',
+    data
+  })
+}
+export function getGameWaterList(data) {
+  return request({
+    url: '/game/getGameWaterList',
+    method: 'get',
+    params: data
+  })
+}
+export function getGameWater(data) {
+  return request({
+    url: '/game/getGameWater',
+    method: 'get',
+    params: data
+  })
+}
+export function updateGameWater(data) {
+  return request({
+    url: '/game/updateGameWater',
+    method: 'get',
+    params: data
+  })
+}
