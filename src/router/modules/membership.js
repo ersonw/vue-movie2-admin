@@ -28,6 +28,12 @@ const MembershipRouter = {
       name: 'membershipListOrder',
       meta: { title: '会员开通记录', noCache: true, activeMenu: 'membershipList' },
       hidden: true
+    },
+    {
+      path: 'membershipBenefit',
+      component: () => import('@/views/membership/membershipBenefit'),
+      name: 'membershipBenefit',
+      meta: { title: '会员权益' }
     }
   ]
 }

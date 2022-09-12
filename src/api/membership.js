@@ -49,3 +49,32 @@ export function deleteMembershipListExperience(data) {
     data
   })
 }
+export function getBenefitList(data) {
+  return request({
+    url: '/membership/getBenefitList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteBenefit(data) {
+  return request({
+    url: '/membership/deleteBenefit',
+    method: 'post',
+    data
+  })
+}
+export function updateBenefit(data) {
+  return request({
+    url: '/membership/updateBenefit',
+    method: 'post',
+    data
+  })
+}
+export function addBenefit(data) {
+  return request({
+    url: '/membership/addBenefit',
+    method: 'post',
+    data
+  })
+}
+
