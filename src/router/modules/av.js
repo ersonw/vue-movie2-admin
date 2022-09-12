@@ -42,6 +42,24 @@ const AVRouter = {
       meta: { title: '购买订单' }
     },
     {
+      path: 'diamondOrder',
+      component: () => import('@/views/av/diamondOrder'),
+      name: 'diamondOrder',
+      meta: { title: '钻石充值订单' }
+    },
+    {
+      path: 'diamondConfig',
+      component: () => import('@/views/av/diamondConfig'),
+      name: 'diamondConfig',
+      meta: { title: '钻石配置' }
+    },
+    {
+      path: 'diamondButton',
+      component: () => import('@/views/av/diamondButton'),
+      name: 'diamondButton',
+      meta: { title: '钻石按钮' }
+    },
+    {
       path: 'trash',
       component: () => import('@/views/av/trash'),
       name: 'trash',

@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { getGameOrderList, deleteGameOrder, makeupGameOrder } from '@/api/game'
+import { getDiamondOrderList, deleteDiamondOrder, makeupDiamondOrder } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -150,7 +150,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getGameOrderList(this.listQuery).then(response => {
+      getDiamondOrderList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -163,7 +163,7 @@ export default {
     makeupGameOrder(row, index) {
       var data = []
       data.push(row.id)
-      makeupGameOrder({ 'ids': data }).then(response => {
+      makeupDiamondOrder({ 'ids': data }).then(response => {
         const { list } = response
         this.list.splice(index, 1, list[0])
         this.$notify({
@@ -175,7 +175,7 @@ export default {
       })
     },
     makeupGameOrderAll() {
-      makeupGameOrder({ 'ids': this.ids }).then(response => {
+      makeupDiamondOrder({ 'ids': this.ids }).then(response => {
         const { list } = response
         for (let i = 0; i < list.length; i++) {
           const index = this.list.findIndex(v => v.id === list[i].id)
@@ -206,7 +206,7 @@ export default {
       }
     },
     handleDeleteAll() {
-      deleteGameOrder({ 'ids': this.ids }).then(data => {
+      deleteDiamondOrder({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -219,7 +219,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteGameOrder({ 'ids': data }).then(data => {
+      deleteDiamondOrder({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',

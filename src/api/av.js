@@ -302,3 +302,66 @@ export function updateVideoConfig(data) {
     data
   })
 }
+export function getDiamondConfig(data) {
+  return request({
+    url: '/av/getDiamondConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateDiamondConfig(data) {
+  return request({
+    url: '/av/updateDiamondConfig',
+    method: 'post',
+    data
+  })
+}
+export function getButtonList(data) {
+  return request({
+    url: '/av/getButtonList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteButton(data) {
+  return request({
+    url: '/av/deleteButton',
+    method: 'post',
+    data
+  })
+}
+export function updateButton(data) {
+  return request({
+    url: '/av/updateButton',
+    method: 'post',
+    data
+  })
+}
+export function addButton(data) {
+  return request({
+    url: '/av/addButton',
+    method: 'post',
+    data
+  })
+}
+export function getDiamondOrderList(data) {
+  return request({
+    url: '/av/getDiamondOrderList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteDiamondOrder(data) {
+  return request({
+    url: '/av/deleteDiamondOrder',
+    method: 'post',
+    data
+  })
+}
+export function makeupDiamondOrder(data) {
+  return request({
+    url: '/av/makeupDiamondOrder',
+    method: 'post',
+    data
+  })
+}
