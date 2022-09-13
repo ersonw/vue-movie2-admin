@@ -35,3 +35,24 @@ export function getOptionList(data) {
     params: data
   })
 }
+export function deleteOption(data) {
+  return request({
+    url: '/recharge/deleteOption',
+    method: 'post',
+    data
+  })
+}
+export function updateOption(data) {
+  return request({
+    url: '/recharge/updateOption',
+    method: 'post',
+    data
+  })
+}
+export function addOption(data) {
+  return request({
+    url: '/recharge/addOption',
+    method: 'post',
+    data
+  })
+}

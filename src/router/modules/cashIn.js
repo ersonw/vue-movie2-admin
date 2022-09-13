@@ -14,8 +14,13 @@ const CashInRouter = {
       component: () => import('@/views/cashIn/rechargeChannel'),
       name: 'rechargeChannel',
       meta: { title: '充值渠道' }
+    },
+    {
+      path: 'rechargeOption',
+      component: () => import('@/views/cashIn/rechargeOption'),
+      name: 'rechargeOption',
+      meta: { title: '充值方式' }
     }
-    // ,
     // {
     //   path: 'membershipListExperience/:id(\\d+)',
     //   component: () => import('@/views/users/membershipListExperience'),

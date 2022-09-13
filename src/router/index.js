@@ -16,6 +16,7 @@ import ShortVideoRouter from '@/router/modules/shortVideo'
 import GameRouter from '@/router/modules/game'
 import MembershipRouter from '@/router/modules/membership'
 import CashInRouter from '@/router/modules/cashIn'
+import UsersRouter from '@/router/modules/users'
 
 export const constantRoutes = [
   {
@@ -141,6 +142,7 @@ export const asyncRoutes = [
   AVRouter,
   ShortVideoRouter,
   GameRouter,
+  UsersRouter,
   MembershipRouter,
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,

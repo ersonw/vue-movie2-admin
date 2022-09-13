@@ -1,15 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="游戏名称" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="用户名或手机号或昵称" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" style="margin-left: 1vw;" @click="handleFilter">
         搜索
       </el-button>
       <el-button v-waves class="filter-item" type="danger" icon="el-icon-delete-solid" style="margin-left: 1vw;" @click="handleDeleteAll">
         批量删除({{ ids.length }})
       </el-button>
-      <el-button v-waves class="filter-item" type="success" icon="el-icon-plus" style="margin-left: 1vw;" @click="handleCreate">
-        添加游戏
+      <el-button v-waves class="filter-item" type="info" icon="el-icon-delete-solid" style="margin-left: 1vw;" @click="freezeAll">
+        批量冻结({{ ids.length }})
+      </el-button>
+      <el-button v-waves class="filter-item" type="success" icon="el-icon-delete-solid" style="margin-left: 1vw;" @click="unfreezeAll">
+        批量解除冻结({{ ids.length }})
       </el-button>
     </div>
 
@@ -29,24 +32,65 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="游戏名" min-width="150px">
+      <el-table-column label="用户名" width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图片地址" class-name="status-col" width="150px">
+      <el-table-column label="昵称" width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.image }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.nickname }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="游戏ID" class-name="status-col" width="100">
+      <el-table-column label="手机号" width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.phone }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="个性签名" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.text }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="头像地址" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.avatar }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="注册IP" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.registerIp }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="总充值" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag type="success">
-            {{ row.gameId }}
+            {{ row.in }}元
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="150px" align="center">
+      <el-table-column label="游戏提现" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            {{ row.gameOut }}元
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="已付费视频数" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            {{ row.pays }}条
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="短视频数" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <router-link :to="'/shortVideo/shortVideoUser/'+row.id">
+            <span class="link-type">{{ row.short }}条</span>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="加入时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -65,49 +109,25 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
+          <el-button size="mini" type="success" @click="unfreezeData(row,$index)">
+            解除冻结
+          </el-button>
+          <el-button size="mini" type="info" @click="freezeData(row,$index)">
+            强制冻结
           </el-button>
           <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
+            彻底删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <el-drawer size="40%" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="游戏名">
-          <el-input v-model="temp.name" type="text" />
-        </el-form-item>
-        <el-form-item label="游戏ID">
-          <el-input v-model="temp.gameId" type="number" />
-        </el-form-item>
-        <el-form-item label="图片地址">
-          <el-input v-model="temp.image" type="textarea" placeholder="留空系统默认" />
-        </el-form-item>
-        <el-form-item label="上线游戏">
-          <el-switch
-            v-model="temp.status"
-            :active-value="1"
-            :inactive-value="0"
-          />
-        </el-form-item>
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
-        </el-button>
-      </el-form>
-    </el-drawer>
   </div>
 </template>
 
 <script>
-import { getGameList, deleteGame, updateGame, addGame } from '@/api/game'
+import { getUserList, deleteUser, freezeUser, unfreezeUser } from '@/api/users'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -120,11 +140,11 @@ export default {
     statusFilter(status) {
       switch (status) {
         case 0:
-          return '未上线'
+          return '审核中'
         case 1:
-          return '已上线'
+          return '正常使用'
         default:
-          return '已删除'
+          return '已冻结'
       }
     }
   },
@@ -141,7 +161,6 @@ export default {
       },
       ids: [],
       temp: {},
-      statusOptions: ['下线游戏', '上线游戏'],
       dialogFormVisible: false,
       dialogStatus: 'create'
     }
@@ -152,7 +171,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getGameList(this.listQuery).then(response => {
+      getUserList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -178,31 +197,6 @@ export default {
         status: 1
       }
     },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          addGame(this.temp).then((data) => {
-            // this.list.splice(0, 0, data)
-            this.list.unshift(data)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: '添加成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -212,40 +206,87 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateGame(tempData).then((data) => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, data)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleDeleteAll() {
-      deleteGame({ 'ids': this.ids }).then(data => {
+    freezeData(row, index) {
+      var data = []
+      data.push(row.id)
+      freezeUser({ 'ids': data }).then((data) => {
+        const { list } = data
+        this.list.splice(index, 1, list[0])
+        this.dialogFormVisible = false
         this.$notify({
           title: 'Success',
-          message: '删除成功',
+          message: '冻结成功',
           type: 'success',
           duration: 2000
         })
-        this.getList()
+      })
+    },
+    freezeAll() {
+      freezeUser({ 'ids': this.ids }).then(data => {
+        const { list } = data
+        this.$notify({
+          title: 'Success',
+          message: '批量冻结成功',
+          type: 'success',
+          duration: 2000
+        })
+        for (let i = 0; i < list.length; i++) {
+          const index = this.list.findIndex(v => v.id === list[i].id)
+          this.list.splice(index, 1, list[i])
+        }
+        this.ids = []
+      })
+    },
+    unfreezeData(row, index) {
+      var data = []
+      data.push(row.id)
+      unfreezeUser({ 'ids': data }).then((data) => {
+        const { list } = data
+        this.list.splice(index, 1, list[0])
+        this.dialogFormVisible = false
+        this.$notify({
+          title: 'Success',
+          message: '解除冻结成功',
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    unfreezeAll() {
+      unfreezeUser({ 'ids': this.ids }).then(data => {
+        const { list } = data
+        this.$notify({
+          title: 'Success',
+          message: '批量解除冻结成功',
+          type: 'success',
+          duration: 2000
+        })
+        for (let i = 0; i < list.length; i++) {
+          const index = this.list.findIndex(v => v.id === list[i].id)
+          this.list.splice(index, 1, list[i])
+        }
+        this.ids = []
+      })
+    },
+    handleDeleteAll() {
+      deleteUser({ 'ids': this.ids }).then(data => {
+        this.$notify({
+          title: 'Success',
+          message: '批量删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        for (let i = 0; i < this.ids.length; i++) {
+          const index = this.list.findIndex(v => v.id === this.ids[i])
+          this.list.splice(index, 1)
+        }
+        this.ids = []
       })
     },
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteGame({ 'ids': data }).then(data => {
+      deleteUser({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
