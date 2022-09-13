@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="名称" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="游戏名称" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" style="margin-left: 1vw;" @click="handleFilter">
         搜索
       </el-button>
@@ -9,7 +9,7 @@
         批量删除({{ ids.length }})
       </el-button>
       <el-button v-waves class="filter-item" type="success" icon="el-icon-plus" style="margin-left: 1vw;" @click="handleCreate">
-        添加
+        添加游戏
       </el-button>
     </div>
 
@@ -29,14 +29,21 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="权益名称" min-width="150px">
+      <el-table-column label="游戏名" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图标地址" class-name="status-col" min-width="150px">
+      <el-table-column label="图片地址" class-name="status-col" width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleOpen(row.icon)">{{ row.icon }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.image }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="游戏ID" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            {{ row.gameId }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="150px" align="center">
@@ -47,6 +54,13 @@
       <el-table-column label="更新时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" class-name="status-col" width="100">
+        <template slot-scope="{row}">
+          <el-tag type="info">
+            {{ row.status | statusFilter }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -65,11 +79,21 @@
 
     <el-drawer size="40%" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="权益名称">
+        <el-form-item label="游戏名">
           <el-input v-model="temp.name" type="text" />
         </el-form-item>
-        <el-form-item label="图标地址">
-          <el-input v-model="temp.icon" type="textarea" placeholder="留空系统默认" />
+        <el-form-item label="游戏ID">
+          <el-input v-model="temp.gameId" type="number" />
+        </el-form-item>
+        <el-form-item label="图片地址">
+          <el-input v-model="temp.image" type="textarea" placeholder="留空系统默认" />
+        </el-form-item>
+        <el-form-item label="上线游戏">
+          <el-switch
+            v-model="temp.status"
+            :active-value="1"
+            :inactive-value="0"
+          />
         </el-form-item>
         <el-button @click="dialogFormVisible = false">
           取消
@@ -83,7 +107,7 @@
 </template>
 
 <script>
-import { getBenefitList, deleteBenefit, updateBenefit, addBenefit } from '@/api/membership'
+import { getGameList, deleteGame, updateGame, addGame } from '@/api/game'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -128,7 +152,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getBenefitList(this.listQuery).then(response => {
+      getGameList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -165,7 +189,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addBenefit(this.temp).then((data) => {
+          addGame(this.temp).then((data) => {
             // this.list.splice(0, 0, data)
             this.list.unshift(data)
             this.dialogFormVisible = false
@@ -178,9 +202,6 @@ export default {
           })
         }
       })
-    },
-    handleOpen(url) {
-      window.open(url, '_blank')
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
@@ -196,7 +217,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateBenefit(tempData).then((data) => {
+          updateGame(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, data)
             this.dialogFormVisible = false
@@ -211,7 +232,7 @@ export default {
       })
     },
     handleDeleteAll() {
-      deleteBenefit({ 'ids': this.ids }).then(data => {
+      deleteGame({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -224,7 +245,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteBenefit({ 'ids': data }).then(data => {
+      deleteGame({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',

@@ -15,6 +15,7 @@ import AVRouter from '@/router/modules/av'
 import ShortVideoRouter from '@/router/modules/shortVideo'
 import GameRouter from '@/router/modules/game'
 import MembershipRouter from '@/router/modules/membership'
+import CashInRouter from '@/router/modules/cashIn'
 
 export const constantRoutes = [
   {
@@ -136,6 +137,7 @@ export const asyncRoutes = [
       }
     ]
   },
+  CashInRouter,
   AVRouter,
   ShortVideoRouter,
   GameRouter,

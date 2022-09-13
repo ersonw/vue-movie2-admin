@@ -34,6 +34,36 @@ const MembershipRouter = {
       component: () => import('@/views/membership/membershipBenefit'),
       name: 'membershipBenefit',
       meta: { title: '会员权益' }
+    },
+    {
+      path: 'membershipGrade',
+      component: () => import('@/views/membership/membershipGrade'),
+      name: 'membershipGrade',
+      meta: { title: '等级图标' }
+    },
+    {
+      path: 'membershipButton',
+      component: () => import('@/views/membership/membershipButton'),
+      name: 'membershipButton',
+      meta: { title: '开通按钮' }
+    },
+    {
+      path: 'membershipOrder',
+      component: () => import('@/views/membership/membershipOrder'),
+      name: 'membershipOrder',
+      meta: { title: '开通订单' }
+    },
+    {
+      path: 'membershipLevel',
+      component: () => import('@/views/membership/membershipLevel'),
+      name: 'membershipLevel',
+      meta: { title: '等级经验配置' }
+    },
+    {
+      path: 'membershipConfig',
+      component: () => import('@/views/membership/membershipConfig'),
+      name: 'membershipConfig',
+      meta: { title: '会员配置' }
     }
   ]
 }

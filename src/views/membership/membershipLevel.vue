@@ -29,14 +29,16 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="权益名称" min-width="150px">
+      <el-table-column label="等级" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
+          <el-tag type="success">
+            LV.{{ row.level }}
+          </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="图标地址" class-name="status-col" min-width="150px">
+      <el-table-column label="所需经验值" class-name="status-col" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleOpen(row.icon)">{{ row.icon }}</span>
+          <span class="link-type">{{ row.experience }}点</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="150px" align="center">
@@ -65,11 +67,11 @@
 
     <el-drawer size="40%" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="权益名称">
-          <el-input v-model="temp.name" type="text" />
+        <el-form-item label="等级">
+          <el-input v-model="temp.level" type="number" />
         </el-form-item>
-        <el-form-item label="图标地址">
-          <el-input v-model="temp.icon" type="textarea" placeholder="留空系统默认" />
+        <el-form-item label="所需经验值">
+          <el-input v-model="temp.experience" type="number" />
         </el-form-item>
         <el-button @click="dialogFormVisible = false">
           取消
@@ -83,7 +85,7 @@
 </template>
 
 <script>
-import { getBenefitList, deleteBenefit, updateBenefit, addBenefit } from '@/api/membership'
+import { getLevelList, deleteLevel, updateLevel, addLevel } from '@/api/membership'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -128,7 +130,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getBenefitList(this.listQuery).then(response => {
+      getLevelList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -165,7 +167,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addBenefit(this.temp).then((data) => {
+          addLevel(this.temp).then((data) => {
             // this.list.splice(0, 0, data)
             this.list.unshift(data)
             this.dialogFormVisible = false
@@ -196,7 +198,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateBenefit(tempData).then((data) => {
+          updateLevel(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, data)
             this.dialogFormVisible = false
@@ -211,7 +213,7 @@ export default {
       })
     },
     handleDeleteAll() {
-      deleteBenefit({ 'ids': this.ids }).then(data => {
+      deleteLevel({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -224,7 +226,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteBenefit({ 'ids': data }).then(data => {
+      deleteLevel({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',

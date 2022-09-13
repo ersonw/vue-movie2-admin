@@ -29,14 +29,44 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="权益名称" min-width="150px">
+      <el-table-column label="渠道名称" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图标地址" class-name="status-col" min-width="150px">
+      <el-table-column label="可用方式" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleOpen(row.icon)">{{ row.icon }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.allowed }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="渠道地址" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleOpen(row.domain)">{{ row.domain }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商户ID" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.mchId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商户密钥" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.secretKey }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="同步回调地址" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleOpen(row.callbackUrl)">{{ row.callbackUrl }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="异步回调地址" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleOpen(row.notifyUrl)">{{ row.notifyUrl }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="错误回调地址" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleOpen(row.errorUrl)">{{ row.errorUrl }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="150px" align="center">
@@ -65,11 +95,30 @@
 
     <el-drawer size="40%" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="权益名称">
-          <el-input v-model="temp.name" type="text" />
+        <el-form-item label="渠道名称">
+          <el-input v-model="temp.title" type="text" />
         </el-form-item>
-        <el-form-item label="图标地址">
-          <el-input v-model="temp.icon" type="textarea" placeholder="留空系统默认" />
+        <el-form-item label="商户ID">
+          <el-input v-model="temp.mchId" type="text" />
+        </el-form-item>
+        <el-form-item label="商户密钥">
+          <el-input v-model="temp.secretKey" type="text" />
+        </el-form-item>
+        <el-form-item label="同步回调地址">
+          <el-input v-model="temp.callbackUrl" type="textarea" placeholder="留空系统默认" />
+        </el-form-item>
+        <el-form-item label="异步回调地址">
+          <el-input v-model="temp.notifyUrl" type="textarea" placeholder="留空系统默认" />
+        </el-form-item>
+        <el-form-item label="错误回调地址">
+          <el-input v-model="temp.errorUrl" type="textarea" placeholder="留空系统默认" />
+        </el-form-item>
+        <el-form-item label="可用于支付方式">
+          <el-checkbox-group v-model="temp.options" class="a-row" @change="handleCheckedCitiesChange($event)">
+            <el-checkbox v-for="(item) in options" :key="item.id" :label="item.id" class="filter-item" style="margin-left:15px;">
+              {{ item.name }}
+            </el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-button @click="dialogFormVisible = false">
           取消
@@ -83,7 +132,7 @@
 </template>
 
 <script>
-import { getBenefitList, deleteBenefit, updateBenefit, addBenefit } from '@/api/membership'
+import { getChannelList, deleteChannel, updateChannel, addChannel, getOptionList } from '@/api/cashIn'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -119,16 +168,18 @@ export default {
       temp: {},
       statusOptions: ['下线游戏', '上线游戏'],
       dialogFormVisible: false,
-      dialogStatus: 'create'
+      dialogStatus: 'create',
+      options: []
     }
   },
   created() {
     this.getList()
+    this.getOptionList()
   },
   methods: {
     getList() {
       this.listLoading = true
-      getBenefitList(this.listQuery).then(response => {
+      getChannelList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -137,6 +188,15 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    getOptionList() {
+      getOptionList({ limit: 60 }).then(res => {
+        const { list } = res
+        this.options = list
+      })
+    },
+    handleCheckedCitiesChange(value) {
+      this.temp.options = value
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -165,7 +225,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addBenefit(this.temp).then((data) => {
+          addChannel(this.temp).then((data) => {
             // this.list.splice(0, 0, data)
             this.list.unshift(data)
             this.dialogFormVisible = false
@@ -196,7 +256,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateBenefit(tempData).then((data) => {
+          updateChannel(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, data)
             this.dialogFormVisible = false
@@ -211,7 +271,7 @@ export default {
       })
     },
     handleDeleteAll() {
-      deleteBenefit({ 'ids': this.ids }).then(data => {
+      deleteChannel({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -224,7 +284,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteBenefit({ 'ids': data }).then(data => {
+      deleteChannel({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',

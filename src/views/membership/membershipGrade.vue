@@ -34,9 +34,28 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图标地址" class-name="status-col" min-width="150px">
+      <el-table-column label="会员背景" class-name="status-col" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleOpen(row.icon)">{{ row.icon }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最小等级" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            LV.{{ row.mini }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="最大等级" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <el-tag type="success">
+            LV.{{ row.max }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="等级权益" class-name="status-col" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.benefits }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="150px" align="center">
@@ -63,15 +82,35 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-drawer size="40%" :visible.sync="dialogFormVisible">
+    <el-drawer size="40%" :visible.sync="dialogFormVisible" :before-close="beforeClose">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
-        <el-form-item label="权益名称">
+        <el-form-item label="等级名称">
           <el-input v-model="temp.name" type="text" />
         </el-form-item>
-        <el-form-item label="图标地址">
+        <el-form-item label="会员背景">
           <el-input v-model="temp.icon" type="textarea" placeholder="留空系统默认" />
         </el-form-item>
-        <el-button @click="dialogFormVisible = false">
+        <el-form-item label="最小等级">
+          <el-input v-model="temp.mini" type="number" />
+        </el-form-item>
+        <el-form-item label="最大等级">
+          <el-input v-model="temp.max" type="number" />
+        </el-form-item>
+        <el-form-item label="会员权益">
+          <el-checkbox-group v-model="temp.options" class="a-row" @change="handleCheckedCitiesChange($event)">
+            <el-checkbox v-for="(item) in benefitOptions" :key="item.id" :label="item.id" class="filter-item" style="margin-left:15px;">
+              {{ item.name }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="上线等级">
+          <el-switch
+            v-model="temp.status"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-button @click="dialogFormVisible = false && resetTemp()">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
@@ -83,7 +122,7 @@
 </template>
 
 <script>
-import { getBenefitList, deleteBenefit, updateBenefit, addBenefit } from '@/api/membership'
+import { getBenefitList, getGradeList, deleteGrade, updateGrade, addGrade } from '@/api/membership'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -116,19 +155,22 @@ export default {
         title: undefined
       },
       ids: [],
-      temp: {},
-      statusOptions: ['下线游戏', '上线游戏'],
+      temp: {
+        options: []
+      },
+      benefitOptions: [],
       dialogFormVisible: false,
       dialogStatus: 'create'
     }
   },
   created() {
     this.getList()
+    this.getBenefitList()
   },
   methods: {
     getList() {
       this.listLoading = true
-      getBenefitList(this.listQuery).then(response => {
+      getGradeList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -137,6 +179,15 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    getBenefitList() {
+      getBenefitList({ limit: 60, page: 1 }).then(res => {
+        const { list } = res
+        this.benefitOptions = list
+      })
+    },
+    handleCheckedCitiesChange(value) {
+      this.temp.options = value
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -148,9 +199,14 @@ export default {
     handleUser(row) {
       console.log(row)
     },
+    beforeClose(hide) {
+      this.resetTemp()
+      hide()
+    },
     resetTemp() {
       this.temp = {
         id: undefined,
+        options: [],
         status: 1
       }
     },
@@ -165,10 +221,11 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addBenefit(this.temp).then((data) => {
+          addGrade(this.temp).then((data) => {
             // this.list.splice(0, 0, data)
             this.list.unshift(data)
             this.dialogFormVisible = false
+            this.resetTemp()
             this.$notify({
               title: 'Success',
               message: '添加成功',
@@ -185,6 +242,7 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
+      // console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -196,10 +254,11 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateBenefit(tempData).then((data) => {
+          updateGrade(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, data)
             this.dialogFormVisible = false
+            this.resetTemp()
             this.$notify({
               title: 'Success',
               message: '更新成功',
@@ -211,7 +270,7 @@ export default {
       })
     },
     handleDeleteAll() {
-      deleteBenefit({ 'ids': this.ids }).then(data => {
+      deleteGrade({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -224,7 +283,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteBenefit({ 'ids': data }).then(data => {
+      deleteGrade({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',

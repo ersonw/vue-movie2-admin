@@ -78,3 +78,122 @@ export function addBenefit(data) {
   })
 }
 
+export function getGradeList(data) {
+  return request({
+    url: '/membership/getGradeList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteGrade(data) {
+  return request({
+    url: '/membership/deleteGrade',
+    method: 'post',
+    data
+  })
+}
+export function updateGrade(data) {
+  return request({
+    url: '/membership/updateGrade',
+    method: 'post',
+    data
+  })
+}
+export function addGrade(data) {
+  return request({
+    url: '/membership/addGrade',
+    method: 'post',
+    data
+  })
+}
+export function getButtonList(data) {
+  return request({
+    url: '/membership/getButtonList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteButton(data) {
+  return request({
+    url: '/membership/deleteButton',
+    method: 'post',
+    data
+  })
+}
+export function updateButton(data) {
+  return request({
+    url: '/membership/updateButton',
+    method: 'post',
+    data
+  })
+}
+export function addButton(data) {
+  return request({
+    url: '/membership/addButton',
+    method: 'post',
+    data
+  })
+}
+export function getOrderList(data) {
+  return request({
+    url: '/membership/getOrderList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteOrder(data) {
+  return request({
+    url: '/membership/deleteOrder',
+    method: 'post',
+    data
+  })
+}
+export function makeupOrder(data) {
+  return request({
+    url: '/membership/makeupOrder',
+    method: 'post',
+    data
+  })
+}
+export function getLevelList(data) {
+  return request({
+    url: '/membership/getLevelList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteLevel(data) {
+  return request({
+    url: '/membership/deleteLevel',
+    method: 'post',
+    data
+  })
+}
+export function updateLevel(data) {
+  return request({
+    url: '/membership/updateLevel',
+    method: 'post',
+    data
+  })
+}
+export function addLevel(data) {
+  return request({
+    url: '/membership/addLevel',
+    method: 'post',
+    data
+  })
+}
+export function getConfig(data) {
+  return request({
+    url: '/membership/getConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateConfig(data) {
+  return request({
+    url: '/membership/updateConfig',
+    method: 'post',
+    data
+  })
+}
