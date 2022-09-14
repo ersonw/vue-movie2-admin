@@ -54,7 +54,16 @@
           <span>{{ row.registerIP }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下线数量" class-name="status-col" width="150">
+      <el-table-column label="直属下线" class-name="status-col" width="150">
+        <template slot-scope="{row}">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+            <el-tag :type="row.record>0?'success':'info'">
+              {{ row.record }}个
+            </el-tag>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="所有下线" class-name="status-col" width="150">
         <template slot-scope="{row}">
           <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
             <el-tag :type="row.records>0?'success':'info'">
