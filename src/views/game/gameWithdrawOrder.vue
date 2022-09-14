@@ -46,21 +46,21 @@
       <!--      </el-table-column>-->
       <el-table-column label="提现金额" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.water>row.recentIn?'success':'info'">
+          <el-tag :type="parseInt(row.water)>parseInt(row.recentIn)?'success':'info'">
             {{ row.amount }}元
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="手续费" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.fee>0?'success':'info'">
+          <el-tag :type="parseInt(row.fee)>0?'success':'info'">
             {{ row.fee }}元
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="建议支付" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.water>row.recentIn?'success':'danger'">
+          <el-tag :type="parseInt(row.water)>parseInt(row.recentIn)?'success':'danger'">
             {{ row.totalFee }}元
           </el-tag>
         </template>
@@ -151,7 +151,7 @@
           <el-tag type="danger">{{ temp.recentIn }}</el-tag>
         </el-form-item>
         <el-form-item label="充值之后有效投注流水">
-          <el-tag :type="temp.water>temp.recentIn?'success':'danger'">{{ temp.water }}</el-tag>
+          <el-tag :type="parseInt(temp.water)>parseInt(temp.recentIn)?'success':'danger'">{{ temp.water }}</el-tag>
         </el-form-item>
         <el-form-item label="姓名">
           <el-tag type="info">{{ temp.name }}</el-tag>

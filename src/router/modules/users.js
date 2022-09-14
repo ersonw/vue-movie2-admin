@@ -14,15 +14,46 @@ const UsersRouter = {
       component: () => import('@/views/users/usersList'),
       name: 'usersList',
       meta: { title: '用户列表' }
+    },
+    {
+      path: 'usersConfig',
+      component: () => import('@/views/users/usersConfig'),
+      name: 'usersConfig',
+      meta: { title: '用户配置' }
+    },
+    {
+      path: 'usersConsume',
+      component: () => import('@/views/users/usersConsume'),
+      name: 'usersConsume',
+      meta: { title: '用户消费' }
+    },
+    {
+      path: 'usersConsumeUser/:id(\\d+)',
+      component: () => import('@/views/users/usersConsumeUser'),
+      name: 'usersConsumeUser',
+      meta: { title: '用户消费记录', noCache: true, activeMenu: 'usersConsume' },
+      hidden: true
+    },
+    {
+      path: 'usersConsumeAgent/:id(\\d+)',
+      component: () => import('@/views/users/usersConsumeAgent'),
+      name: 'usersConsumeAgent',
+      meta: { title: '用户消费代理分成', noCache: true, activeMenu: 'usersConsume' },
+      hidden: true
+    },
+    {
+      path: 'usersSpreadRecord',
+      component: () => import('@/views/users/usersSpreadRecord'),
+      name: 'usersSpreadRecord',
+      meta: { title: '推广记录' }
+    },
+    {
+      path: 'usersSpreadRecordUser/:id(\\d+)',
+      component: () => import('@/views/users/usersSpreadRecordUser'),
+      name: 'usersSpreadRecordUser',
+      meta: { title: '用户消费记录', noCache: true, activeMenu: 'usersSpreadRecord' },
+      hidden: true
     }
-    // ,
-    // {
-    //   path: 'membershipListExperience/:id(\\d+)',
-    //   component: () => import('@/views/users/membershipListExperience'),
-    //   name: 'membershipListExperience',
-    //   meta: { title: '会员经验记录', noCache: true, activeMenu: 'membershipList' },
-    //   hidden: true
-    // }
   ]
 }
 export default UsersRouter
