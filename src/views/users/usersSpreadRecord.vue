@@ -63,6 +63,15 @@
           </router-link>
         </template>
       </el-table-column>
+      <el-table-column label="下线产生收益" class-name="status-col" width="150">
+        <template slot-scope="{row}">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+            <el-tag :type="row.rebate>0?'success':'info'">
+              {{ row.rebate }}元
+            </el-tag>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column label="生效时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
