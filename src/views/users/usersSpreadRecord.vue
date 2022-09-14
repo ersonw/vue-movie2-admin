@@ -58,7 +58,7 @@
         <template slot-scope="{row}">
           <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
             <el-tag :type="row.records>0?'success':'info'">
-              {{ row.records }}
+              {{ row.records }}个
             </el-tag>
           </router-link>
         </template>
