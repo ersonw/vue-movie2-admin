@@ -51,8 +51,14 @@ const UsersRouter = {
       path: 'usersSpreadRecordUser/:id(\\d+)',
       component: () => import('@/views/users/usersSpreadRecordUser'),
       name: 'usersSpreadRecordUser',
-      meta: { title: '用户消费记录', noCache: true, activeMenu: 'usersSpreadRecord' },
+      meta: { title: '推广下线记录', noCache: true, activeMenu: 'usersSpreadRecord' },
       hidden: true
+    },
+    {
+      path: 'usersSpreadConfig',
+      component: () => import('@/views/users/usersSpreadConfig'),
+      name: 'usersSpreadConfig',
+      meta: { title: '推广返利配置' }
     }
   ]
 }

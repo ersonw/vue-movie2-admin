@@ -113,3 +113,17 @@ export function deleteUsersSpreadRecordUserList(data) {
     data
   })
 }
+export function getSpreadConfig(data) {
+  return request({
+    url: '/users/getSpreadConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateSpreadConfig(data) {
+  return request({
+    url: '/users/updateSpreadConfig',
+    method: 'post',
+    data
+  })
+}

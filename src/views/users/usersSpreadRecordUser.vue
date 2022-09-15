@@ -27,58 +27,68 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户ID" width="80">
+      <el-table-column label="用户昵称" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.userId }}</span>
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.userId">
+            <span class="link-type">{{ row.nickname }}</span>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="消费备注" width="80">
+      <el-table-column label="用户名" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.text }}</span>
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.userId">
+            <span class="link-type">{{ row.username }}</span>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="消费金额" min-width="150px">
+      <el-table-column label="手机号" min-width="150px">
         <template slot-scope="{row}">
-          <el-tag type="info">
-            {{ row.amount }}元
-          </el-tag>
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.userId">
+            <span class="link-type">{{ row.phone }}</span>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="上级分佣" min-width="150px">
+      <el-table-column label="注册IP" min-width="150px">
         <template slot-scope="{row}">
-          <el-tag :type="row.users>0?'success':'info'">
-            {{ row.users }}
-          </el-tag>
+          <span>{{ row.registerIP }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="代理分佣" min-width="150px">
+      <el-table-column label="直属下线" class-name="status-col" width="150">
         <template slot-scope="{row}">
-          <el-tag :type="row.agent>0?'success':'info'">
-            {{ row.agent }}
-          </el-tag>
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.userId">
+            <el-tag :type="row.record>0?'success':'info'">
+              {{ row.record }}个
+            </el-tag>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" width="150px" align="center">
+      <el-table-column label="用户消费" class-name="status-col" width="150">
         <template slot-scope="{row}">
-          <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <router-link :to="'/users/usersConsumeUser/'+row.userId">
+            <el-tag :type="row.consume>0?'success':'info'">
+              {{ row.consume }}元
+            </el-tag>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="添加时间" width="150px" align="center">
+      <el-table-column label="下线产生收益" class-name="status-col" width="150">
+        <template slot-scope="{row}">
+          <router-link :to="'/users/usersConsumeUser/'+row.userId">
+            <el-tag :type="row.rebate>0?'success':'info'">
+              {{ row.rebate }}元
+            </el-tag>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column label="生效时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag type="info">
-            {{ row.status | statusFilter }}
-          </el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="danger" @click="deleteUsersSpreadRecordUserList(row,$index)">
-            取消返利
+          <el-button size="mini" type="danger" @click="deleteUsersSpreadRecordUserList(row,$index)">
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -97,18 +107,6 @@ export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    statusFilter(status) {
-      switch (status) {
-        case 0:
-          return '系统冻结'
-        case 1:
-          return '生效中'
-        default:
-          return '后台冻结'
-      }
-    }
-  },
   data() {
     return {
       tableKey: 0,

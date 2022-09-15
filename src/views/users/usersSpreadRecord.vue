@@ -2,8 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="用户ID、昵称、用户名" style="width: 300px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
-      <el-date-picker v-model="listQuery.start" type="date" placeholder="选择开始日期" style="margin-left: 1vw;" clearable value-format="timestamp" @change="dateChange" />
-      <el-date-picker v-model="listQuery.end" type="date" placeholder="选择结束日期" style="margin-left: 1vw;" clearable value-format="timestamp" @change="dateChange" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" style="margin-left: 1vw;" @click="handleFilter">
         搜索
       </el-button>
@@ -25,21 +23,21 @@
       </el-table-column>
       <el-table-column label="用户昵称" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.shareUserId">
             <span class="link-type">{{ row.nickname }}</span>
           </router-link>
         </template>
       </el-table-column>
       <el-table-column label="用户名" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.shareUserId">
             <span class="link-type">{{ row.username }}</span>
           </router-link>
         </template>
       </el-table-column>
       <el-table-column label="手机号" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.shareUserId">
             <span class="link-type">{{ row.phone }}</span>
           </router-link>
         </template>
@@ -56,34 +54,20 @@
       </el-table-column>
       <el-table-column label="直属下线" class-name="status-col" width="150">
         <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.shareUserId">
             <el-tag :type="row.record>0?'success':'info'">
               {{ row.record }}个
             </el-tag>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="所有下线" class-name="status-col" width="150">
-        <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
-            <el-tag :type="row.records>0?'success':'info'">
-              {{ row.records }}个
-            </el-tag>
-          </router-link>
-        </template>
-      </el-table-column>
       <el-table-column label="下线产生收益" class-name="status-col" width="150">
         <template slot-scope="{row}">
-          <router-link :to="'/users/usersSpreadRecordUser/'+row.id">
+          <router-link :to="'/users/usersSpreadRecordUser/'+row.shareUserId">
             <el-tag :type="row.rebate>0?'success':'info'">
               {{ row.rebate }}元
             </el-tag>
           </router-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="生效时间" width="150px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.addTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="注册时间" width="150px" align="center">
@@ -128,9 +112,6 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        type: 0,
-        start: undefined,
-        end: undefined,
         title: undefined
       },
       typeOptions: ['用户ID', '用户昵称', '用户名', '手机号码']
