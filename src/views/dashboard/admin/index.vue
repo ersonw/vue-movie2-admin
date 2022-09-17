@@ -65,7 +65,7 @@
         </el-col>
       </el-row>
     </div>
-    <div><h2 style="color: black">提现数据</h2></div>
+    <div><h2 style="color: black">游戏提现数据</h2></div>
     <div class="panel-group">
       <el-row :gutter="40" class="panel-group">
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
