@@ -7,6 +7,13 @@ export function getUserList(data) {
     params: data
   })
 }
+export function getUserRobotList(data) {
+  return request({
+    url: '/users/getUserRobotList',
+    method: 'get',
+    params: data
+  })
+}
 export function deleteUser(data) {
   return request({
     url: '/users/deleteUser',
@@ -123,6 +130,20 @@ export function getSpreadConfig(data) {
 export function updateSpreadConfig(data) {
   return request({
     url: '/users/updateSpreadConfig',
+    method: 'post',
+    data
+  })
+}
+export function getShareConfig(data) {
+  return request({
+    url: '/users/getShareConfig',
+    method: 'get',
+    params: data
+  })
+}
+export function updateShareConfig(data) {
+  return request({
+    url: '/users/updateShareConfig',
     method: 'post',
     data
   })

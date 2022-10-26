@@ -1,6 +1,38 @@
 <template>
   <div class="app-container">
     <el-form ref="dataForm" v-loading="loading" :model="temp" label-position="left" style="width: 80%; margin-left:50px;">
+      <el-form-item label="存储域名">
+        <el-input v-model="temp.endPoint" type="text" />
+      </el-form-item>
+      <el-form-item label="图片域名">
+        <el-input v-model="temp.picDomian" type="text" />
+      </el-form-item>
+      <el-form-item label="存储bucket">
+        <el-input v-model="temp.bucket" type="text" />
+      </el-form-item>
+      <el-form-item label="accessKey">
+        <el-input v-model="temp.accessKey" type="text" />
+      </el-form-item>
+      <el-form-item label="secretKey">
+        <el-input v-model="temp.secretKey" type="text" />
+      </el-form-item>
+      <el-form-item label="存储端口">
+        <el-input v-model="temp.port" type="text" />
+      </el-form-item>
+      <el-form-item label="useSSL">
+        <el-switch
+          v-model="temp.useSSL"
+          active-value="1"
+          inactive-value="0"
+        />
+      </el-form-item>
+      <el-form-item label="强制覆盖存储配置">
+        <el-switch
+          v-model="temp.force"
+          active-value="1"
+          inactive-value="0"
+        />
+      </el-form-item>
       <el-form-item label="上传审核">
         <el-switch
           v-model="temp.auditUpload"

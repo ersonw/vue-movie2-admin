@@ -98,6 +98,9 @@
         <el-form-item label="渠道名称">
           <el-input v-model="temp.title" type="text" />
         </el-form-item>
+        <el-form-item label="渠道地址">
+          <el-input v-model="temp.domain" type="text" />
+        </el-form-item>
         <el-form-item label="商户ID">
           <el-input v-model="temp.mchId" type="text" />
         </el-form-item>
@@ -166,7 +169,7 @@ export default {
       },
       ids: [],
       temp: {},
-      statusOptions: ['下线游戏', '上线游戏'],
+      statusOptions: ['下线渠道', '上线渠道'],
       dialogFormVisible: false,
       dialogStatus: 'create',
       options: []

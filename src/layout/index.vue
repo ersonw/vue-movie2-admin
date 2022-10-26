@@ -1,5 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
+    <audio ref="audio" preload="auto" src="" />
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
@@ -16,22 +17,33 @@
 </template>
 
 <script>
-import RightPanel from '@/components/RightPanel'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+// import RightPanel from '@/components/RightPanel'
+import { AppMain, Navbar,
+  // Settings,
+  Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import { info } from '@/api/dashboard'
 
 export default {
   name: 'Layout',
   components: {
     AppMain,
     Navbar,
-    RightPanel,
-    Settings,
+    // RightPanel,
+    // Settings,
     Sidebar,
     TagsView
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      audio: undefined,
+      audios: [],
+      countDownTime: 0,
+      interval: null
+    }
+  },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
@@ -49,7 +61,63 @@ export default {
       }
     }
   },
+  created() {
+    this.countDown()
+  },
+  mounted() {
+    this.$refs.audio.addEventListener('ended', () => {
+      this.$refs.audio.muted = false
+      this.audios.splice(0, 1)
+      if (this.audios.length > 0) {
+        this.$refs.audio.src = this.audios[0]
+        // this.$refs.audio.load()
+        this.$refs.audio.play()
+      }
+      console.log(this.audios)
+    })
+  },
   methods: {
+    countDown() {
+      this.interval = setInterval(() => {
+        if (this.countDownTime > 0) {
+          if (window.document.hidden === false) this.countDownTime--
+        } else {
+          clearInterval(this.interval)
+          // this.getAll()
+          this.getnews()
+        }
+      }, 1000)
+    },
+    getnews() {
+      info().then(response => {
+        const { list } = response
+        for (let i = 0; i < list.length; i++) {
+          switch (list[i].type) {
+            case 6:
+              this.audios.unshift('/sounds/cashout.mp3')
+              break
+            case 7:
+              this.audios.unshift('/sounds/shortVideo.mp3')
+              break
+            case 3:
+              this.audios.unshift('/sounds/diamond.mp3')
+              break
+            case 4:
+              this.audios.unshift('/sounds/game.mp3')
+              break
+            case 1:
+              this.audios.unshift('/sounds/membership.mp3')
+              break
+          }
+        }
+        if (this.audios.length > 0) {
+          this.$refs.audio.src = this.audios[0]
+          this.$refs.audio.play()
+        }
+        this.countDownTime = 30
+        this.countDown()
+      })
+    },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }

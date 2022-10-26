@@ -11,9 +11,13 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus" style="margin-left: 1vw;" @click="handlePriceAll">
         批量付费({{ ids.length }})
       </el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus" style="margin-left: 1vw;" @click="handleClass">
+        批量分类({{ ids.length }})
+      </el-button>
     </div>
 
     <el-table
+      ref="multipleTable"
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
@@ -127,7 +131,41 @@
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
+    <el-dialog title="批量分类" :visible.sync="classFormVisible">
+      <el-select v-model="classOption" placeholder="选择分类" clearable style="argin-left: 1vw;" class="filter-item" min-width="80">
+        <el-option v-for="(item,index) in classOptions" :key="index" :label="item.name" :value="item.id" />
+      </el-select>
+      <el-button v-waves class="filter-item" type="success" icon="el-icon-refresh" style="margin-left: 1vw;margin-bottom: 1vw" @click="updateClass">
+        提交更新
+      </el-button>
+      <el-table
+        :key="ctableKey"
+        v-loading="clistLoading"
+        :data="clist"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;"
+      >
+        <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+          <template slot-scope="{row}">
+            <span>{{ row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" min-width="150px">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handlePlay(row)">{{ row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="{row,$index}">
+            <el-button size="mini" type="danger" @click="handleDeleteClass(row,$index)">
+              移除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
     <el-dialog title="编辑信息" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="标题">
@@ -183,7 +221,7 @@
 </template>
 
 <script>
-import { deleteAv, getList, update, addPrice } from '@/api/av'
+import { deleteAv, getList, update, addPrice, getClassListVideo, updateClassVideo } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -209,8 +247,11 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      ctableKey: 0,
+      clist: null,
       total: 0,
       listLoading: true,
+      clistLoading: true,
       listQuery: {
         page: 1,
         limit: 20,
@@ -227,7 +268,10 @@ export default {
       dialogPlayerVisible: false,
       dialogPriceVisible: false,
       playData: {},
-      myPlyer: undefined
+      myPlyer: undefined,
+      classFormVisible: false,
+      classOption: undefined,
+      classOptions: []
     }
   },
   created() {
@@ -245,6 +289,55 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    getClassList() {
+      getClassListVideo().then(response => {
+        const { list } = response
+        this.classOptions = list
+      })
+    },
+    handleClass() {
+      if (this.ids.length === 0) return
+      this.classFormVisible = true
+      this.clistLoading = true
+      this.getClassList()
+      this.clist = this.list.map(item => {
+        return this.ids.findIndex(v => v === item.id) > -1 ? item : undefined
+      })
+      for (let i = this.clist.length - 1; i >= 0; i--) {
+        if (this.clist[i] === undefined) this.clist.splice(i, 1)
+      }
+      this.clistLoading = false
+      this.$refs.multipleTable.clearSelection()
+    },
+    updateClass() {
+      if (this.classOption === undefined || this.classOptions.findIndex(v => v.id === this.classOption) < 0) {
+        this.$notify({
+          title: 'Error',
+          message: '未选择分类',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      }
+      updateClassVideo({ ids: this.clist.map(item => item.id), id: this.classOption }).then(response => {
+        const { list } = response
+        for (let i = 0; i < list.length; i++) {
+          const index = this.list.findIndex(v => v.id === list[i].id)
+          this.list.splice(index, 1, list[i])
+        }
+        this.$notify({
+          title: 'Success',
+          message: '更新成功',
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    handleDeleteClass(row, index) {
+      // this.ids.splice(this.ids.findIndex(v => v === row.id), 1)
+      this.clist.splice(index, 1)
+      if (this.clist.length === 0) this.classFormVisible = false
     },
     handleFilter() {
       this.listQuery.page = 1

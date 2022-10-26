@@ -29,6 +29,11 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="套餐" min-width="100">
+        <template slot-scope="{row}">
+          {{ row.name }}
+        </template>
+      </el-table-column>
       <el-table-column label="开通天数" min-width="100">
         <template slot-scope="{row}">
           <el-tag type="success">
@@ -107,6 +112,9 @@
 
     <el-drawer size="40%" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" style="width: 90%; margin-left:50px;">
+        <el-form-item label="套餐名">
+          <el-input v-model="temp.name" type="text" />
+        </el-form-item>
         <el-form-item label="开通天数">
           <el-input v-model="temp.amount" type="number" />
         </el-form-item>

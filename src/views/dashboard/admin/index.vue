@@ -65,9 +65,48 @@
         </el-col>
       </el-row>
     </div>
-    <div><h2 style="color: black">游戏提现数据</h2></div>
+    <div><h2 style="color: black">游戏数据</h2></div>
     <div class="panel-group">
       <el-row :gutter="40" class="panel-group">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInAll')">
+            <div class="card-panel-icon-wrapper icon-people">
+              <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                总充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInGameAll" :duration="2600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('membershipToday')">
+            <div class="card-panel-icon-wrapper icon-message">
+              <svg-icon icon-class="message" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                今日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInGameToday" :duration="3000" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('membershipYesterday')">
+            <div class="card-panel-icon-wrapper icon-shopping">
+              <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                昨日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInGameYesterday" :duration="3600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('cashOutAll')">
             <div class="card-panel-icon-wrapper icon-message">
@@ -135,6 +174,19 @@
                 总用户
               </div>
               <count-to :start-val="0" :end-val="usersAll" :duration="2600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('online')">
+            <div class="card-panel-icon-wrapper icon-people">
+              <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                在线用户
+              </div>
+              <count-to :start-val="0" :end-val="online" :duration="2600" class="card-panel-num" />
             </div>
           </div>
         </el-col>
@@ -208,6 +260,45 @@
             </div>
           </div>
         </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInMembershipAll')">
+            <div class="card-panel-icon-wrapper icon-people">
+              <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                总充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInMembershipAll" :duration="2600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInMembershipToday')">
+            <div class="card-panel-icon-wrapper icon-message">
+              <svg-icon icon-class="message" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                今日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInMembershipToday" :duration="3000" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInMembershipYesterday')">
+            <div class="card-panel-icon-wrapper icon-shopping">
+              <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                昨日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInMembershipYesterday" :duration="3600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
       </el-row>
     </div>
     <div><h2 style="color: black">长视频数据</h2></div>
@@ -249,6 +340,45 @@
                 昨日新增
               </div>
               <count-to :start-val="0" :end-val="videosYesterday" :duration="3600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInDiamondAll')">
+            <div class="card-panel-icon-wrapper icon-people">
+              <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                总钻石充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInDiamondAll" :duration="2600" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInDiamondToday')">
+            <div class="card-panel-icon-wrapper icon-message">
+              <svg-icon icon-class="message" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                今日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInDiamondToday" :duration="3000" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel" @click="handleSetLineChartData('cashInDiamondYesterday')">
+            <div class="card-panel-icon-wrapper icon-shopping">
+              <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                昨日充值
+              </div>
+              <count-to :start-val="0" :end-val="cashInDiamondYesterday" :duration="3600" class="card-panel-num" />
             </div>
           </div>
         </el-col>
@@ -402,6 +532,16 @@ export default {
       shortYesterday: 0,
       shortAudit: 0,
       countDownTime: 0,
+      online: 0,
+      cashInGameAll: 0,
+      cashInMembershipAll: 0,
+      cashInDiamondAll: 0,
+      cashInGameToday: 0,
+      cashInMembershipToday: 0,
+      cashInDiamondToday: 0,
+      cashInGameYesterday: 0,
+      cashInMembershipYesterday: 0,
+      cashInDiamondYesterday: 0,
       interval: null
     }
   },
@@ -433,10 +573,11 @@ export default {
     countDown() {
       this.interval = setInterval(() => {
         if (this.countDownTime > 0) {
-          this.countDownTime--
+          if (window.document.hidden === false) this.countDownTime--
         } else {
           clearInterval(this.interval)
           this.getAll()
+          // this.getnews()
         }
       }, 1000)
     },
@@ -462,7 +603,17 @@ export default {
           shortAll,
           shortToday,
           shortYesterday,
-          shortAudit
+          shortAudit,
+          cashInGameAll,
+          cashInMembershipAll,
+          cashInDiamondAll,
+          cashInGameToday,
+          cashInMembershipToday,
+          cashInDiamondToday,
+          cashInGameYesterday,
+          cashInMembershipYesterday,
+          cashInDiamondYesterday,
+          online
         } = data
         this.cashInAll = cashInAll
         this.cashInToday = cashInToday
@@ -484,6 +635,16 @@ export default {
         this.shortToday = shortToday
         this.shortYesterday = shortYesterday
         this.shortAudit = shortAudit
+        this.cashInGameAll = cashInGameAll
+        this.cashInDiamondAll = cashInDiamondAll
+        this.cashInMembershipAll = cashInMembershipAll
+        this.cashInGameToday = cashInGameToday
+        this.cashInDiamondToday = cashInDiamondToday
+        this.cashInMembershipToday = cashInMembershipToday
+        this.cashInGameYesterday = cashInGameYesterday
+        this.cashInMembershipYesterday = cashInMembershipYesterday
+        this.cashInDiamondYesterday = cashInDiamondYesterday
+        this.online = online
         this.countDownTime = 30
         this.countDown()
       })

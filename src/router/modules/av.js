@@ -17,6 +17,12 @@ const AVRouter = {
       meta: { title: '全部视频' }
     },
     {
+      path: 'videoClass',
+      component: () => import('@/views/av/videoClass'),
+      name: 'videoClass',
+      meta: { title: '分类管理' }
+    },
+    {
       path: 'videoPrice',
       component: () => import('@/views/av/videoPrice'),
       name: 'videoPrice',

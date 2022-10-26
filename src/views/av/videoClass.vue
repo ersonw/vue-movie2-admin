@@ -15,6 +15,7 @@
 
     <el-table
       :key="tableKey"
+      ref="multipleTable"
       v-loading="listLoading"
       :data="list"
       border
@@ -29,11 +30,11 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="推荐标题" min-width="150px">
+      <el-table-column label="类标题" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
-            <span class="link-type">{{ row.name }}</span>
-          </router-link>
+          <!--          <router-link :to="'/av/videoConcentration/'+row.id">-->
+          <span class="link-type">{{ row.name }}</span>
+          <!--          </router-link>-->
         </template>
       </el-table-column>
       <el-table-column label="排序(数字越大越靠前)" min-width="150px">
@@ -45,11 +46,9 @@
       </el-table-column>
       <el-table-column label="总计" min-width="150px">
         <template slot-scope="{row}">
-          <router-link :to="'/av/videoConcentration/'+row.id">
-            <el-tag type="success">
-              {{ row.count }}
-            </el-tag>
-          </router-link>
+          <el-tag type="success">
+            {{ row.count }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="添加时间" width="150px" align="center">
@@ -96,7 +95,7 @@
 </template>
 
 <script>
-import { getConcentration, deleteConcentration, addConcentration, updateConcentration } from '@/api/av'
+import { getClassList, deleteClass, updateClass, addClass } from '@/api/av'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -142,7 +141,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getConcentration(this.listQuery).then(response => {
+      getClassList(this.listQuery).then(response => {
         this.list = response.list
         this.total = response.total
 
@@ -155,18 +154,19 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
     },
-    handleList(row, index) {
-      this.$router.push({ path: '/av/videoConcentration/' + row.id })
-    },
     handleDeleteAll() {
-      deleteConcentration({ 'ids': this.ids }).then(data => {
+      deleteClass({ 'ids': this.ids }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
           type: 'success',
           duration: 2000
         })
-        this.getList()
+        for (let i = 0; i < this.ids.length; i++) {
+          const index = this.list.findIndex(v => v.id === this.id[i])
+          this.list.splice(index, 1)
+        }
+        this.$refs.multipleTable.clearSelection()
       })
     },
     handleFilter() {
@@ -191,7 +191,7 @@ export default {
     handleDelete(row, index) {
       var data = []
       data.push(row.id)
-      deleteConcentration({ 'ids': data }).then(data => {
+      deleteClass({ 'ids': data }).then(data => {
         this.$notify({
           title: 'Success',
           message: '删除成功',
@@ -215,10 +215,11 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          addConcentration(tempData).then((data) => {
+          addClass(tempData).then((data) => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
-            this.list.splice(0, 0, result)
+            this.list.unshift(result)
+            // this.list.splice(0, 0, result)
             // this.getList()
             this.dialogFormVisible = false
             this.$notify({
@@ -236,7 +237,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateConcentration(tempData).then((data) => {
+          updateClass(tempData).then((data) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             const { result } = data
             this.list.splice(index, 1, result)

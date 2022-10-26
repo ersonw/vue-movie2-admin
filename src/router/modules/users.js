@@ -16,10 +16,10 @@ const UsersRouter = {
       meta: { title: '用户列表' }
     },
     {
-      path: 'usersConfig',
-      component: () => import('@/views/users/usersConfig'),
-      name: 'usersConfig',
-      meta: { title: '用户配置' }
+      path: 'userRobotList',
+      component: () => import('@/views/users/userRobotList'),
+      name: 'userRobotList',
+      meta: { title: '机器人列表' }
     },
     {
       path: 'usersConsume',
@@ -59,6 +59,12 @@ const UsersRouter = {
       component: () => import('@/views/users/usersSpreadConfig'),
       name: 'usersSpreadConfig',
       meta: { title: '推广返利配置' }
+    },
+    {
+      path: 'usersShareConfig',
+      component: () => import('@/views/users/usersShareConfig'),
+      name: 'usersShareConfig',
+      meta: { title: '推广任务配置' }
     }
   ]
 }

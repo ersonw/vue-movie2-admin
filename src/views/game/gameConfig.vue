@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-form ref="dataForm" v-loading="loading" :model="temp" label-position="left" style="width: 80%; margin-left:50px;">
+      <el-form-item label="游戏大厅客服">
+        <el-input v-model="temp.service" />
+      </el-form-item>
       <el-form-item label="存放游戏封面的域名">
         <el-input v-model="temp.ImageDomain" />
       </el-form-item>

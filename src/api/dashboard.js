@@ -7,3 +7,10 @@ export function getAll(data) {
     params: data
   })
 }
+export function info(data) {
+  return request({
+    url: '/dashboard/info',
+    method: 'get',
+    params: data
+  })
+}

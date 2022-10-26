@@ -1,6 +1,15 @@
 <template>
   <div class="app-container">
     <el-form ref="dataForm" v-loading="loading" :model="temp" label-position="left" style="width: 80%; margin-left:50px;">
+      <el-form-item label="播放域名">
+        <el-input v-model="temp.videoDomain" type="text" />
+      </el-form-item>
+      <el-form-item label="图片域名">
+        <el-input v-model="temp.picDomain" type="text" />
+      </el-form-item>
+      <el-form-item label="分享域名">
+        <el-input v-model="temp.shareDomain" type="text" />
+      </el-form-item>
       <el-form-item label="最大视频随机播放基数">
         <el-input v-model="temp.maxPlays" type="number" />
       </el-form-item>

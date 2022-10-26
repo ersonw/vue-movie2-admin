@@ -351,6 +351,20 @@ export function getDiamondOrderList(data) {
     params: data
   })
 }
+export function getClassListVideo(data) {
+  return request({
+    url: '/av/getClassListVideo',
+    method: 'get',
+    params: data
+  })
+}
+export function updateClassVideo(data) {
+  return request({
+    url: '/av/updateClassVideo',
+    method: 'post',
+    data
+  })
+}
 export function deleteDiamondOrder(data) {
   return request({
     url: '/av/deleteDiamondOrder',
@@ -361,6 +375,34 @@ export function deleteDiamondOrder(data) {
 export function makeupDiamondOrder(data) {
   return request({
     url: '/av/makeupDiamondOrder',
+    method: 'post',
+    data
+  })
+}
+export function getClassList(data) {
+  return request({
+    url: '/av/getClassList',
+    method: 'get',
+    params: data
+  })
+}
+export function deleteClass(data) {
+  return request({
+    url: '/av/deleteClass',
+    method: 'post',
+    data
+  })
+}
+export function updateClass(data) {
+  return request({
+    url: '/av/updateClass',
+    method: 'post',
+    data
+  })
+}
+export function addClass(data) {
+  return request({
+    url: '/av/addClass',
     method: 'post',
     data
   })

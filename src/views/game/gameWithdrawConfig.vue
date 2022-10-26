@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-form ref="dataForm" v-loading="loading" :model="temp" label-position="left" style="width: 80%; margin-left:50px;">
+      <el-form-item label="流水倍数">
+        <el-input v-model="temp.water" type="number" />
+      </el-form-item>
       <el-form-item label="单笔最小提现￥">
         <el-input v-model="temp.mini" type="number" />
       </el-form-item>
